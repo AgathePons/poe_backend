@@ -1,5 +1,6 @@
 package survey.backend.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import survey.backend.dto.TraineeDto;
 
@@ -89,6 +90,7 @@ public class TraineeController {
   }
 
   @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
   public TraineeDto add(@RequestBody TraineeDto traineeDto) {
     // TODO: add in under layer
     traineeDto.setId(42);
