@@ -25,18 +25,33 @@ public class TraineeController {
             .id(1)
             .firstName("John")
             .lastName("Doe")
+            .birthDate(LocalDate.of(1945, 5, 3))
             .build();
     var trainee2 = TraineeDto.builder()
             .id(2)
             .firstName("Jane")
             .lastName("Doe")
+            .birthDate(LocalDate.of(1900, 12, 24))
             .build();
     var trainee3 = TraineeDto.builder()
             .id(3)
             .firstName("Micheline")
             .lastName("Duduche")
+            .birthDate(LocalDate.of(2001, 11, 18))
             .build();
-    var traineeSet = Set.of(trainee1, trainee2, trainee3);
+    var trainee4 = TraineeDto.builder()
+            .id(4)
+            .firstName("Jean-Michèle")
+            .lastName("Apeuprai")
+            .birthDate(LocalDate.of(1990, 6, 30))
+            .build();
+    var trainee5 = TraineeDto.builder()
+            .id(4)
+            .firstName("Philomène")
+            .lastName("Dupuy")
+            .birthDate(LocalDate.of(1650, 9, 1))
+            .build();
+    var traineeSet = Set.of(trainee1, trainee2, trainee3, trainee4, trainee5);
     return traineeSet;
   }
 
@@ -95,5 +110,30 @@ public class TraineeController {
     // TODO: add in under layer
     traineeDto.setId(42);
     return traineeDto;
+  }
+
+  @DeleteMapping("{id}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void removeById(@PathVariable("id") int id) {
+    // TODO remove
+
+  }
+
+  @PutMapping("/{id}")
+  public TraineeDto updatePartialById(@PathVariable("id") int id, @RequestBody TraineeDto updatedTrainee) {
+    var trainee1 = TraineeDto.builder()
+            .id(666)
+            .firstName("John")
+            .lastName("Doe")
+            .email("johndoe@mail.com")
+            .phoneNumber("06 55 88 99 66")
+            .birthDate(LocalDate.of(1900, 7, 1))
+            .build();
+    trainee1.setFirstName(updatedTrainee.getFirstName());
+    trainee1.setLastName(updatedTrainee.getLastName());
+    trainee1.setEmail(updatedTrainee.getEmail());
+    trainee1.setPhoneNumber(updatedTrainee.getPhoneNumber());
+    trainee1.setBirthDate(updatedTrainee.getBirthDate());
+    return  trainee1;
   }
 }
