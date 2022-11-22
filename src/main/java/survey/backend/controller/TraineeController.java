@@ -1,8 +1,10 @@
 package survey.backend.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import survey.backend.dto.TraineeDto;
+import survey.backend.service.TraineeService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -14,6 +16,9 @@ import java.util.Set;
 @RequestMapping("api/trainee")
 public class TraineeController {
 
+  @Autowired // DI (Dependency Injection)
+  private TraineeService traineeService;
+
   /**
    * list of trainees
    * route /api/trainee/
@@ -21,38 +26,39 @@ public class TraineeController {
    */
   @GetMapping
   public Set<TraineeDto> list() {
-    var trainee1 = TraineeDto.builder()
-            .id(1)
-            .firstName("John")
-            .lastName("Doe")
-            .birthDate(LocalDate.of(1945, 5, 3))
-            .build();
-    var trainee2 = TraineeDto.builder()
-            .id(2)
-            .firstName("Jane")
-            .lastName("Doe")
-            .birthDate(LocalDate.of(1900, 12, 24))
-            .build();
-    var trainee3 = TraineeDto.builder()
-            .id(3)
-            .firstName("Micheline")
-            .lastName("Duduche")
-            .birthDate(LocalDate.of(2001, 11, 18))
-            .build();
-    var trainee4 = TraineeDto.builder()
-            .id(4)
-            .firstName("Jean-Michèle")
-            .lastName("Apeuprai")
-            .birthDate(LocalDate.of(1990, 6, 30))
-            .build();
-    var trainee5 = TraineeDto.builder()
-            .id(4)
-            .firstName("Philomène")
-            .lastName("Dupuy")
-            .birthDate(LocalDate.of(1650, 9, 1))
-            .build();
-    var traineeSet = Set.of(trainee1, trainee2, trainee3, trainee4, trainee5);
-    return traineeSet;
+    return  traineeService.findAll();
+//    var trainee1 = TraineeDto.builder()
+//            .id(1)
+//            .firstName("John")
+//            .lastName("Doe")
+//            .birthDate(LocalDate.of(1945, 5, 3))
+//            .build();
+//    var trainee2 = TraineeDto.builder()
+//            .id(2)
+//            .firstName("Jane")
+//            .lastName("Doe")
+//            .birthDate(LocalDate.of(1900, 12, 24))
+//            .build();
+//    var trainee3 = TraineeDto.builder()
+//            .id(3)
+//            .firstName("Micheline")
+//            .lastName("Duduche")
+//            .birthDate(LocalDate.of(2001, 11, 18))
+//            .build();
+//    var trainee4 = TraineeDto.builder()
+//            .id(4)
+//            .firstName("Jean-Michèle")
+//            .lastName("Apeuprai")
+//            .birthDate(LocalDate.of(1990, 6, 30))
+//            .build();
+//    var trainee5 = TraineeDto.builder()
+//            .id(4)
+//            .firstName("Philomène")
+//            .lastName("Dupuy")
+//            .birthDate(LocalDate.of(1650, 9, 1))
+//            .build();
+//    var traineeSet = Set.of(trainee1, trainee2, trainee3, trainee4, trainee5);
+//    return traineeSet;
   }
 
   /**
@@ -62,15 +68,21 @@ public class TraineeController {
    * @return the trainee
    */
   @GetMapping("{id}")
-  public Optional<TraineeDto> one(@PathVariable("id") int id) {
-    // return  Optional.empty();
-    return Optional.of(TraineeDto.builder()
-            .id(id)
-            .firstName("John")
-            .lastName("Doe")
-            .birthDate(LocalDate.of(1900, 7, 1))
-            .build()
-    );
+  public TraineeDto one(@PathVariable("id") int id) {
+    Optional<TraineeDto> optTraineeDto = traineeService.findById(id);
+    if (optTraineeDto.isPresent()) {
+      return optTraineeDto.get();
+    } else {
+      throw new IllegalArgumentException("Trainee with id " + id + " not found");
+    }
+//    return  Optional.empty();
+//    return Optional.of(TraineeDto.builder()
+//            .id(id)
+//            .firstName("John")
+//            .lastName("Doe")
+//            .birthDate(LocalDate.of(1900, 7, 1))
+//            .build()
+//    );
   }
 
   /**
@@ -82,8 +94,8 @@ public class TraineeController {
    */
   @GetMapping("search")
   public Set<TraineeDto> search(
-          @RequestParam(name="fn", required = false) String firstName,
-          @RequestParam(name="ln", required = false) String lastName
+          @RequestParam(name="fn", required = false) String lastName,
+          @RequestParam(name="ln", required = false) String firstName
   ) {
     var trainee1 = TraineeDto.builder()
             .id(1)
@@ -107,9 +119,7 @@ public class TraineeController {
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public TraineeDto add(@RequestBody TraineeDto traineeDto) {
-    // TODO: add in under layer
-    traineeDto.setId(42);
-    return traineeDto;
+    return traineeService.add(traineeDto);
   }
 
   @DeleteMapping("{id}")
