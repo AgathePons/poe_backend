@@ -7,7 +7,6 @@ import survey.backend.dto.TraineeDto;
 import survey.backend.service.TraineeService;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -68,7 +67,7 @@ public class TraineeController {
    * @return the trainee
    */
   @GetMapping("{id}")
-  public TraineeDto one(@PathVariable("id") int id) {
+  public TraineeDto getById(@PathVariable("id") int id) {
     Optional<TraineeDto> optTraineeDto = traineeService.findById(id);
     if (optTraineeDto.isPresent()) {
       return optTraineeDto.get();
