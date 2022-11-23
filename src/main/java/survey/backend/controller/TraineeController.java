@@ -73,16 +73,9 @@ public class TraineeController {
     if (optTraineeDto.isPresent()) {
       return optTraineeDto.get();
     } else {
-      throw NoDataFoundError.withId("Trainee with id ", id);
+      throw NoDataFoundError.withId("Trainee", id);
+
     }
-//    return  Optional.empty();
-//    return Optional.of(TraineeDto.builder()
-//            .id(id)
-//            .firstName("John")
-//            .lastName("Doe")
-//            .birthDate(LocalDate.of(1900, 7, 1))
-//            .build()
-//    );
   }
 
   /**
