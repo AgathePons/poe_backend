@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import survey.backend.dto.TraineeDto;
+import survey.backend.error.NoDataFoundError;
 import survey.backend.service.TraineeService;
 
 import java.time.LocalDate;
@@ -72,7 +73,7 @@ public class TraineeController {
     if (optTraineeDto.isPresent()) {
       return optTraineeDto.get();
     } else {
-      throw new IllegalArgumentException("Trainee with id " + id + " not found");
+      throw NoDataFoundError.withId("Trainee with id ", id);
     }
 //    return  Optional.empty();
 //    return Optional.of(TraineeDto.builder()
