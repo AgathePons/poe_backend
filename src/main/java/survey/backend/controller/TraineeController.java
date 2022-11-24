@@ -7,6 +7,7 @@ import survey.backend.dto.TraineeDto;
 import survey.backend.error.NoDataFoundError;
 import survey.backend.service.TraineeService;
 
+import javax.validation.Valid;
 import java.util.Optional;
 import java.util.Set;
 
@@ -61,7 +62,7 @@ public class TraineeController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public TraineeDto add( @RequestBody TraineeDto traineeDto) {
+  public TraineeDto add(@Valid @RequestBody TraineeDto traineeDto) {
     // TODO traineeDto must be validate
     return traineeService.add(traineeDto);
   }
