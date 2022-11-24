@@ -13,7 +13,7 @@ import java.util.Set;
 @RestController
 @RequestMapping("api/trainee")
 public class TraineeController {
-  final String ITEM_TYPE = "Trainee";
+  static final String ITEM_TYPE = "Trainee";
   @Autowired // DI (Dependency Injection)
   private TraineeService traineeService;
 
@@ -61,7 +61,8 @@ public class TraineeController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public TraineeDto add(@RequestBody TraineeDto traineeDto) {
+  public TraineeDto add( @RequestBody TraineeDto traineeDto) {
+    // TODO traineeDto must be validate
     return traineeService.add(traineeDto);
   }
 
@@ -78,6 +79,7 @@ public class TraineeController {
 
   @PutMapping("/{id}")
   public TraineeDto updatePartialById(@PathVariable("id") int id, @RequestBody TraineeDto updatedTrainee) {
+    // TODO traineeDto must be validate
     Optional<TraineeDto> optTraineeDto = traineeService.update(updatedTrainee);
     if(optTraineeDto.isPresent()) {
       return updatedTrainee;
