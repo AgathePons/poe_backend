@@ -78,7 +78,7 @@ public class DummyTraineeService implements TraineeService {
   public boolean delete(int id) {
     Optional<TraineeDto> traineeToDelete = this.repository.findById(id);
     if(traineeToDelete.isPresent()) {
-      return this.repository.deleteById(id);
+      return this.repository.delete(traineeToDelete.get());
     }
     return  false;
   }

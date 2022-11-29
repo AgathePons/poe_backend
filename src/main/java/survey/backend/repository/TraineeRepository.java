@@ -28,11 +28,8 @@ public class TraineeRepository {
     return traineeDto;
   }
 
-  public boolean deleteById(int id) {
-    Optional<TraineeDto> traineeToDelete = this.findById(id);
-    System.out.println(traineeToDelete);
-    trainees.remove(traineeToDelete.get());
-    return true;
+  public boolean delete(TraineeDto traineeToDelete) {
+    return trainees.remove(traineeToDelete);
   }
 
   public TraineeRepository() {
