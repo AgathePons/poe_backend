@@ -22,7 +22,7 @@ public class DummyTraineeService implements TraineeService {
 
   @Override
   public Optional<TraineeDto> findById(int id) {
-
+    return this.repository.findById(id);
   }
 
   @Override

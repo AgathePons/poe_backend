@@ -17,6 +17,13 @@ public class TraineeRepository {
     return this.trainees.stream()
             .filter( trainee -> trainee.getId() == id)
             .findFirst();
+
+//    TraineeDto[] trainees = (TraineeDto[]) this.trainees.toArray();
+//    for ( TraineeDto traineeDto : trainees) {
+//      if (traineeDto.getId() == id) {
+//        return Optional.of(traineeDto);
+//      }
+//    }
   }
 
   public TraineeRepository() {
