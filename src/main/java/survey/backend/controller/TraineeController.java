@@ -15,7 +15,7 @@ import java.util.Set;
 @RequestMapping("api/trainee")
 public class TraineeController {
   static final String ITEM_TYPE = "Trainee";
-  @Autowired // DI (Dependency Injection)
+  @Autowired // DI (Dependency Injection): see singleton
   private TraineeService traineeService;
 
   /**
