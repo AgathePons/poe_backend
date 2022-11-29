@@ -21,7 +21,7 @@ public interface TraineeService {
 
   /**
    * search trainees with criteria lastname, firstname
-   * one criteria can be null, not both
+   * one criterion can be null, not both
    * @param lastName
    * @param firstName
    * @return trainee set with this lastname (if not null) and this firstname (if not null)
