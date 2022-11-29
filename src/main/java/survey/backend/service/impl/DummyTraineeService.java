@@ -2,6 +2,7 @@ package survey.backend.service.impl;
 
 import org.springframework.stereotype.Service;
 import survey.backend.dto.TraineeDto;
+import survey.backend.repository.TraineeRepository;
 import survey.backend.service.TraineeService;
 
 import java.time.LocalDate;
@@ -12,55 +13,16 @@ import java.util.Set;
 @Service
 public class DummyTraineeService implements TraineeService {
 
+  private TraineeRepository repository = new TraineeRepository();
+
   @Override
   public Set<TraineeDto> findAll() {
-    var trainee1 = TraineeDto.builder()
-            .id(1)
-            .firstName("John")
-            .lastName("Doe")
-            .birthDate(LocalDate.of(1945, 5, 3))
-            .build();
-    var trainee2 = TraineeDto.builder()
-            .id(2)
-            .firstName("Jane")
-            .lastName("Doe")
-            .birthDate(LocalDate.of(1900, 12, 24))
-            .build();
-    var trainee3 = TraineeDto.builder()
-            .id(3)
-            .firstName("Micheline")
-            .lastName("Duduche")
-            .birthDate(LocalDate.of(2001, 11, 18))
-            .build();
-    var trainee4 = TraineeDto.builder()
-            .id(4)
-            .firstName("Jean-Michèle")
-            .lastName("Apeuprai")
-            .birthDate(LocalDate.of(1990, 6, 30))
-            .build();
-    var trainee5 = TraineeDto.builder()
-            .id(4)
-            .firstName("Philomène")
-            .lastName("Dupuy")
-            .birthDate(LocalDate.of(1650, 9, 1))
-            .build();
-    var traineeSet = Set.of(trainee1, trainee2, trainee3, trainee4, trainee5);
-    return traineeSet;
+    return this.repository.getTrainees();
   }
 
   @Override
   public Optional<TraineeDto> findById(int id) {
-    if (id == 0) {
-      return Optional.empty();
-    } else {
-      var trainee1 = TraineeDto.builder()
-              .id(id)
-              .firstName("John")
-              .lastName("Doe")
-              .birthDate(LocalDate.of(1945, 5, 3))
-              .build();
-      return Optional.of(trainee1);
-    }
+    return this.repository.findById(id);
   }
 
   @Override
@@ -87,8 +49,7 @@ public class DummyTraineeService implements TraineeService {
 
   @Override
   public TraineeDto add(TraineeDto traineeDto) {
-    traineeDto.setId(666);
-    return traineeDto;
+    return this.repository.add(traineeDto);
   }
 
   @Override
@@ -115,10 +76,10 @@ public class DummyTraineeService implements TraineeService {
 
   @Override
   public boolean delete(int id) {
-    if (id == 0) {
-      return false;
-    } else {
-      return true;
+    Optional<TraineeDto> traineeToDelete = this.repository.findById(id);
+    if(traineeToDelete.isPresent()) {
+      return this.repository.delete(traineeToDelete.get());
     }
+    return  false;
   }
 }
