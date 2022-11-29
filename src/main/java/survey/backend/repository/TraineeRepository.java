@@ -5,9 +5,11 @@ import survey.backend.dto.TraineeDto;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class TraineeRepository {
   private Set<TraineeDto> trainees;
+  private int id = 777;
 
   public Set<TraineeDto> getTrainees() {
     return this.trainees;
@@ -17,13 +19,20 @@ public class TraineeRepository {
     return this.trainees.stream()
             .filter(trainee -> trainee.getId() == id)
             .findFirst();
+  }
 
-//    TraineeDto[] trainees = (TraineeDto[]) this.trainees.toArray();
-//    for ( TraineeDto traineeDto : trainees) {
-//      if (traineeDto.getId() == id) {
-//        return Optional.of(traineeDto);
-//      }
-//    }
+  public TraineeDto add(TraineeDto traineeDto) {
+    traineeDto.setId(this.id);
+    this.id += 1;
+    trainees.add(traineeDto);
+    return traineeDto;
+  }
+
+  public boolean deleteById(int id) {
+    Optional<TraineeDto> traineeToDelete = this.findById(id);
+    System.out.println(traineeToDelete);
+    trainees.remove(traineeToDelete.get());
+    return true;
   }
 
   public TraineeRepository() {
@@ -36,6 +45,8 @@ public class TraineeRepository {
             .firstName("John")
             .lastName("Doe")
             .birthDate(LocalDate.of(1945, 5, 3))
+            .email("john-doe@mail.com")
+            .phoneNumber("0628977545")
             .build();
     var trainee2 = TraineeDto.builder()
             .id(2)
@@ -61,7 +72,8 @@ public class TraineeRepository {
             .lastName("Dupuy")
             .birthDate(LocalDate.of(1650, 9, 1))
             .build();
-    var traineeSet = Set.of(trainee1, trainee2, trainee3, trainee4, trainee5);
+    var traineeSet = Set.of(trainee1, trainee2, trainee3, trainee4, trainee5)
+            .stream().collect(Collectors.toSet());
     this.trainees = traineeSet;
   }
 }

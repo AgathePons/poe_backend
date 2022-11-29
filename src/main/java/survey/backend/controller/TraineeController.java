@@ -69,11 +69,8 @@ public class TraineeController {
 
   @DeleteMapping("{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public boolean removeById(@PathVariable("id") int id) {
-    boolean isExisting = traineeService.delete(id);
-    if(isExisting) {
-      return true;
-    } else {
+  public void removeById(@PathVariable("id") int id) {
+    if(!traineeService.delete(id)) {
       throw NoDataFoundError.withId(ITEM_TYPE, id);
     }
   }
