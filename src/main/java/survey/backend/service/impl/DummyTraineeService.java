@@ -49,8 +49,7 @@ public class DummyTraineeService implements TraineeService {
 
   @Override
   public TraineeDto add(TraineeDto traineeDto) {
-    traineeDto.setId(666);
-    return traineeDto;
+    return this.repository.add(traineeDto);
   }
 
   @Override
@@ -77,10 +76,10 @@ public class DummyTraineeService implements TraineeService {
 
   @Override
   public boolean delete(int id) {
-    if (id == 0) {
-      return false;
-    } else {
-      return true;
+    Optional<TraineeDto> traineeToDelete = this.repository.findById(id);
+    if(traineeToDelete.isPresent()) {
+      return this.repository.delete(traineeToDelete.get());
     }
+    return  false;
   }
 }
