@@ -22,8 +22,8 @@ public class TraineeRepository {
   }
 
   public TraineeDto add(TraineeDto traineeDto) {
-    traineeDto.setId(this.id);
-    this.id += 1;
+    traineeDto.setId(id);
+    id = id + 1;
     trainees.add(traineeDto);
     return traineeDto;
   }
@@ -36,6 +36,16 @@ public class TraineeRepository {
     this.createFakeRepository();
   }
 
+  private Integer nextId() {
+    TraineeDto[] trainees = (TraineeDto[]) this.trainees.toArray();
+    int nextId = 1;
+    for (TraineeDto trainee : trainees) {
+      if (trainee.getId() > nextId) {
+        nextId = trainee.getId();
+      }
+    }
+    return Integer.valueOf(nextId + 1);
+  }
   private void createFakeRepository() {
     var trainee1 = TraineeDto.builder()
             .id(1)
