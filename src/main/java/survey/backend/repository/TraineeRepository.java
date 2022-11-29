@@ -15,7 +15,7 @@ public class TraineeRepository {
 
   public Optional<TraineeDto> findById(int id) {
     return this.trainees.stream()
-            .filter( trainee -> trainee.getId() == id)
+            .filter(trainee -> trainee.getId() == id)
             .findFirst();
 
 //    TraineeDto[] trainees = (TraineeDto[]) this.trainees.toArray();
@@ -56,7 +56,7 @@ public class TraineeRepository {
             .birthDate(LocalDate.of(1990, 6, 30))
             .build();
     var trainee5 = TraineeDto.builder()
-            .id(4)
+            .id(5)
             .firstName("Philomène")
             .lastName("Dupuy")
             .birthDate(LocalDate.of(1650, 9, 1))
