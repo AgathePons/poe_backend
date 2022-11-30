@@ -4,13 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import survey.backend.dto.TraineeDto;
 import survey.backend.entities.Trainee;
-import survey.backend.repository.FakeTraineeRepository;
 import survey.backend.repository.TraineeRepository;
 
-import java.time.LocalDate;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class TraineeService implements survey.backend.service.TraineeService {
@@ -36,12 +32,17 @@ private TraineeRepository traineeRepository;
 
   @Override
   public Trainee add(TraineeDto traineeDto) {
-    return null;
-//    return this.traineeRepository.save(traineeDto);
+    return this.traineeRepository.save(traineeDto.toTrainee());
   }
 
   @Override
   public Optional<Trainee> update(TraineeDto traineeDto) {
+    Trainee trainee = traineeDto.toTrainee();
+    Optional<Trainee> oTrainee = this.traineeRepository.findById(trainee.getId());
+    if (oTrainee.isPresent()) {
+      this.traineeRepository.save(trainee);
+      return Optional.of(trainee);
+    }
     return Optional.empty();
   }
 

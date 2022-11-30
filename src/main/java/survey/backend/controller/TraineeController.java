@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import survey.backend.dto.TraineeDto;
+import survey.backend.entities.Trainee;
 import survey.backend.error.NoDataFoundError;
 import survey.backend.service.TraineeService;
 
@@ -24,7 +25,7 @@ public class TraineeController {
    * @return
    */
   @GetMapping
-  public Iterable<TraineeDto> getAll() {
+  public Iterable<Trainee> getAll() {
     return traineeService.findAll();
   }
 
@@ -35,13 +36,12 @@ public class TraineeController {
    * @return the trainee
    */
   @GetMapping("{id}")
-  public TraineeDto getById(@PathVariable("id") int id) {
-    Optional<TraineeDto> optTraineeDto = traineeService.findById(id);
-    if (optTraineeDto.isPresent()) {
-      return optTraineeDto.get();
+  public Trainee getById(@PathVariable("id") int id) {
+    Optional<Trainee> optTrainee = traineeService.findById(id);
+    if (optTrainee.isPresent()) {
+      return optTrainee.get();
     } else {
       throw NoDataFoundError.withId(ITEM_TYPE, id);
-
     }
   }
 
@@ -53,7 +53,7 @@ public class TraineeController {
    * @return trainee corresponding
    */
   @GetMapping("search")
-  public Set<TraineeDto> search(
+  public Iterable<Trainee> search(
           @RequestParam(name="fn", required = false) String lastName,
           @RequestParam(name="ln", required = false) String firstName
   ) {
@@ -62,7 +62,7 @@ public class TraineeController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public TraineeDto add(@Valid @RequestBody TraineeDto traineeDto) {
+  public Trainee add(@Valid @RequestBody TraineeDto traineeDto) {
     // TODO traineeDto must be validate
     return traineeService.add(traineeDto);
   }
@@ -76,13 +76,9 @@ public class TraineeController {
   }
 
   @PutMapping("/{id}")
-  public TraineeDto updatePartialById(@PathVariable("id") int id, @RequestBody TraineeDto updatedTrainee) {
-    // TODO traineeDto must be validate
-    Optional<TraineeDto> optTraineeDto = traineeService.update(updatedTrainee);
-    if(optTraineeDto.isPresent()) {
-      return updatedTrainee;
-    } else {
-      throw NoDataFoundError.withId(ITEM_TYPE, id);
-    }
+  public Trainee update(@Valid @RequestBody TraineeDto traineeDto) {
+    // TODO: traineeDto must be valid
+    return traineeService.update(traineeDto)
+            .orElseThrow(() -> NoDataFoundError.withId("Trainee", Math.toIntExact(traineeDto.getId())));
   }
 }
