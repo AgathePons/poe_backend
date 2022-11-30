@@ -24,8 +24,8 @@ public class TraineeController {
    * @return
    */
   @GetMapping
-  public Set<TraineeDto> getAll() {
-    return  traineeService.findAll();
+  public Iterable<TraineeDto> getAll() {
+    return traineeService.findAll();
   }
 
   /**
