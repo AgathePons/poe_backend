@@ -1,50 +1,37 @@
 package survey.backend.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import survey.backend.dto.PoeDto;
+import survey.backend.entities.Poe;
+import survey.backend.error.NoDataFoundError;
+import survey.backend.service.impl.PoeService;
 
-import java.time.LocalDate;
 import java.util.Optional;
-import java.util.Set;
 
 @RestController
 @RequestMapping("api/poe")
 public class PoeController {
 
+  static final String ITEM_TYPE = "Poe";
+
+  @Autowired
+  private PoeService poeService;
+
   @GetMapping
-  public Set<PoeDto> list() {
-    var poe1 = PoeDto.builder()
-            .id(1)
-            .title("Fullstack Java")
-            .beginDate(LocalDate.of(2022, 11, 2))
-            .endDate(LocalDate.of(2023, 1, 27))
-            .build();
-    var poe2 = PoeDto.builder()
-            .id(2)
-            .title("Macramé")
-            .beginDate(LocalDate.of(2020, 10, 22))
-            .endDate(LocalDate.of(2021, 2, 3))
-            .build();
-    var poe3 = PoeDto.builder()
-            .id(3)
-            .title("Taxidermie avancée")
-            .beginDate(LocalDate.of(2023, 3, 4))
-            .endDate(LocalDate.of(2023, 6, 17))
-            .build();
-    var poeSet = Set.of(poe1, poe2, poe3);
-    return poeSet;
+  public Iterable<Poe> findAll() {
+    return this.poeService.findAll();
   }
 
   @GetMapping("{id}")
-  public Optional<PoeDto> one(@PathVariable("id") int id) {
-    return Optional.of(PoeDto.builder()
-            .id(id)
-            .title("Macramé")
-            .beginDate(LocalDate.of(2022, 11, 2))
-            .endDate(LocalDate.of(2023, 1, 27))
-            .build()
-    );
+  public Poe getById(@PathVariable("id") int id) {
+    Optional<Poe> oPoe = poeService.findById(id);
+    if (oPoe.isPresent()) {
+      return oPoe.get();
+    } else {
+      throw NoDataFoundError.withId(ITEM_TYPE, id);
+    }
   }
 
   @PostMapping

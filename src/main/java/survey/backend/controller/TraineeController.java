@@ -5,12 +5,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import survey.backend.dto.TraineeDto;
 import survey.backend.entities.Trainee;
+import survey.backend.error.BadRequestError;
 import survey.backend.error.NoDataFoundError;
 import survey.backend.service.TraineeService;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @RestController
 @RequestMapping("api/trainee")
@@ -54,10 +58,23 @@ public class TraineeController {
    */
   @GetMapping("search")
   public Iterable<Trainee> search(
-          @RequestParam(name="fn", required = false) String lastName,
-          @RequestParam(name="ln", required = false) String firstName
+          @RequestParam(name="ln", required = false) String lastName,
+          @RequestParam(name="fn", required = false) String firstName
   ) {
+    if (lastName == null && firstName == null) {
+      throw BadRequestError.withNoArgs(ITEM_TYPE);
+    }
+
+    List<Trainee> trainees = StreamSupport.stream(
+            traineeService.search(lastName, firstName).spliterator(), false
+    ).toList();
+
+    if (trainees.isEmpty()) {
+      throw NoDataFoundError.noResult(ITEM_TYPE, lastName, firstName);
+    }
     return traineeService.search(lastName, firstName);
+
+
   }
 
   @PostMapping
@@ -75,9 +92,8 @@ public class TraineeController {
     }
   }
 
-  @PutMapping("/{id}")
+  @PutMapping
   public Trainee update(@Valid @RequestBody TraineeDto traineeDto) {
-    // TODO: traineeDto must be valid
     return traineeService.update(traineeDto)
             .orElseThrow(() -> NoDataFoundError.withId("Trainee", Math.toIntExact(traineeDto.getId())));
   }
