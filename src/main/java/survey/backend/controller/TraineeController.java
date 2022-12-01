@@ -70,7 +70,7 @@ public class TraineeController {
     ).toList();
 
     if (trainees.isEmpty()) {
-      throw NoDataFoundError.noResult(ITEM_TYPE);
+      throw NoDataFoundError.noResult(ITEM_TYPE, lastName, firstName);
     }
     return traineeService.search(lastName, firstName);
 

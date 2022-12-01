@@ -10,7 +10,13 @@ public class NoDataFoundError extends RuntimeException  {
     return new NoDataFoundError(itemType + " with id " + id + " not found");
   }
 
-  public static NoDataFoundError noResult(String itemType) {
-    return new NoDataFoundError("Search for " + itemType + " returns no result");
+  public static NoDataFoundError noResult(String itemType, String firstAttribute, String secondAttribute) {
+    return new NoDataFoundError("Search for "
+            + itemType
+            + " with attributes "
+            + firstAttribute
+            + " and "
+            +secondAttribute
+            + " returns no result");
   }
 }
