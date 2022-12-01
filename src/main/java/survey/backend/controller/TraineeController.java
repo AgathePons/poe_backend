@@ -92,9 +92,8 @@ public class TraineeController {
     }
   }
 
-  @PutMapping("/{id}")
+  @PutMapping
   public Trainee update(@Valid @RequestBody TraineeDto traineeDto) {
-    // TODO: traineeDto must be valid
     return traineeService.update(traineeDto)
             .orElseThrow(() -> NoDataFoundError.withId("Trainee", Math.toIntExact(traineeDto.getId())));
   }
