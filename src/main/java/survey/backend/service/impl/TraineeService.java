@@ -26,8 +26,13 @@ private TraineeRepository traineeRepository;
 
   @Override
   public Iterable<Trainee> search(String lastName, String firstName) {
-    // TODO implement
-    return null;
+    if (lastName != null && firstName != null) {
+      return this.traineeRepository.listByLastNameFirstName(lastName, firstName);
+    }
+    if (lastName != null && firstName == null) {
+      return this.traineeRepository.findByLastName(lastName);
+    }
+    return this.traineeRepository.findByFirstName(firstName);
   }
 
   @Override
