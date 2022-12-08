@@ -36,10 +36,9 @@ public class PoeController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public PoeDto add(@RequestBody PoeDto poeDto) {
-    // TODO: add in under layer
-    poeDto.setId(42);
-    return  poeDto;
+  public Poe add(@RequestBody PoeDto poeDto) {
+
+    return  poeService.add(poeDto);
   }
 
   @DeleteMapping("{id}")
