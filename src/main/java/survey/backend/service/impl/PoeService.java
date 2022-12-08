@@ -38,6 +38,14 @@ public class PoeService {
     return this.poeRepository.save(poeDto.toPoe());
 
   }
+
+  public Optional<Poe> update(PoeDto poeDto) {
+    Poe poe = poeDto.toPoe();
+    Optional<Poe> oPoe = this.poeRepository.findById(poe.getId());
+    if (oPoe.isPresent()) {
+      this.poeRepository.save(poe);
+      return Optional.of(poe);
+    }
+    return Optional.empty();
+  }
 }
-
-
