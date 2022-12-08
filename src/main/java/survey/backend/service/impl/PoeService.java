@@ -20,4 +20,14 @@ public class PoeService {
   public Optional<Poe> findById(int id) {
     return this.poeRepository.findById((long) id);
   }
+
+
+  public boolean delete(int id) {
+    Optional<Poe> poeToDelete = this.poeRepository.findById((long) id);
+    if(poeToDelete.isPresent()) {
+      this.poeRepository.delete(poeToDelete.get());
+      return true;
+    }
+    return false;
+  }
 }
