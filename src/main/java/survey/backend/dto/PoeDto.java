@@ -1,7 +1,9 @@
 package survey.backend.dto;
 
 import lombok.*;
+
 import survey.backend.entities.Poe;
+
 import survey.backend.entities.PoeType;
 
 import java.time.LocalDate;
@@ -14,6 +16,7 @@ import java.util.Date;
 public class PoeDto {
   private Long id;
   private String title;
+
   private Date beginDate;
   private Date endDate;
   private PoeType type;
@@ -31,4 +34,5 @@ public class PoeDto {
 
 
   }
+
 }

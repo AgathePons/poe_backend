@@ -25,8 +25,18 @@ public class PoeService {
   }
 
 
+
+  public boolean delete(int id) {
+    Optional<Poe> poeToDelete = this.poeRepository.findById((long) id);
+    if(poeToDelete.isPresent()) {
+      this.poeRepository.delete(poeToDelete.get());
+      return true;
+    }
+    return false;
+
   public Poe add(PoeDto poeDto) {
     return this.poeRepository.save(poeDto.toPoe());
+
   }
 }
 

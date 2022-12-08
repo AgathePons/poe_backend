@@ -44,6 +44,8 @@ public class PoeController {
   @DeleteMapping("{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void removeById(@PathVariable("id") int id) {
-    // TODO remove
+    if(!poeService.delete(id)) {
+      throw NoDataFoundError.withId(ITEM_TYPE, id);
+    }
   }
 }
