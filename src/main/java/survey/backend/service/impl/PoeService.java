@@ -2,7 +2,10 @@ package survey.backend.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import survey.backend.dto.PoeDto;
+import survey.backend.dto.TraineeDto;
 import survey.backend.entities.Poe;
+import survey.backend.entities.Trainee;
 import survey.backend.repository.PoeRepository;
 
 import java.util.Optional;
@@ -22,6 +25,7 @@ public class PoeService {
   }
 
 
+
   public boolean delete(int id) {
     Optional<Poe> poeToDelete = this.poeRepository.findById((long) id);
     if(poeToDelete.isPresent()) {
@@ -29,5 +33,11 @@ public class PoeService {
       return true;
     }
     return false;
+
+  public Poe add(PoeDto poeDto) {
+    return this.poeRepository.save(poeDto.toPoe());
+
   }
 }
+
+
