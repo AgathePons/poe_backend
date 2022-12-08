@@ -8,6 +8,7 @@ import survey.backend.entities.Poe;
 import survey.backend.error.NoDataFoundError;
 import survey.backend.service.impl.PoeService;
 
+import javax.validation.Valid;
 import java.util.Optional;
 
 @RestController
@@ -45,5 +46,11 @@ public class PoeController {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void removeById(@PathVariable("id") int id) {
     // TODO remove
+  }
+
+  @PutMapping
+  public Poe update(@RequestBody PoeDto poeDto) {
+    return poeService.update(poeDto)
+            .orElseThrow(() -> NoDataFoundError.withId("Poe", Math.toIntExact(poeDto.getId())));
   }
 }
