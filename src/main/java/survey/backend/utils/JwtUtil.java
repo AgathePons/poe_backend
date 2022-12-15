@@ -5,15 +5,15 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
-import survey.backend.entities.User;
+//import survey.backend.entities.User;
 import survey.backend.error.JwtTokenMissingException;
 
 import java.util.Date;
 
 @Component
 public class JwtUtil {
-    // TODO verify import of value (lombok or beans factory?)
     @Value("${jwt.secret}")
     private String jwtSecret;
 
@@ -34,7 +34,7 @@ public class JwtUtil {
 
     public String generateToken(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        Claims claims = Jwts.claims().setSubject(user.getLogin());
+        Claims claims = Jwts.claims().setSubject(user.getUsername());
 
         final long nowMillis = System.currentTimeMillis();
         final long expMillis = nowMillis + tokenValidity;

@@ -51,6 +51,7 @@ public class UserAuthServiceImpl implements UserDetailsService {
         user.setUserRoles(requestVo.getUserRoles().stream().map(role -> {
             UserRole userRole = new UserRole();
             userRole.setRole(role);
+            userRole.setUser(user);
             return userRole;
         }).collect(Collectors.toSet()));
 

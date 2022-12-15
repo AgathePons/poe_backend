@@ -7,13 +7,15 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import survey.backend.entities.User;
+// TODO import survey.backend.entities.User;
 import survey.backend.error.DisabledUserException;
 import survey.backend.service.impl.UserAuthServiceImpl;
+import survey.backend.utils.CustomUserDetail;
 import survey.backend.utils.JwtUtil;
 import survey.backend.vo.RequestVo;
 import survey.backend.vo.ResponseVo;
@@ -33,8 +35,10 @@ public class JwtRestApi {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @PostMapping("/signin")
+    @PostMapping("/api/user/signin")
     public ResponseEntity<ResponseVo> generateJwtToken(@RequestBody RequestVo request) {
+        // TODO remove sout
+        System.out.println("REQUEST post /api/user/signin >> " + request);
         Authentication authentication = null;
         try {
             authentication = authenticationManager
@@ -42,9 +46,15 @@ public class JwtRestApi {
         } catch (DisabledException e) {
             throw new DisabledUserException("User Inactive");
         }
+        // TODO remove sout
+        System.out.println("-------- >> authentification: " + authentication.getPrincipal().getClass());
+        System.out.println("-------- >> authentification: " + authentication.getPrincipal());
 
         User user = (User) authentication.getPrincipal();
-        Set<String> roles = user.getUserRoles().stream().map(r -> r.getRole()).collect(Collectors.toSet());
+
+        Set<String> roles = user.getAuthorities().stream().map(r -> r.getAuthority()).collect(Collectors.toSet());
+
+        // TODO Set<String> roles = user.getUserRoles().stream().map(r -> r.getRole()).collect(Collectors.toSet());
 
         String token = jwtUtil.generateToken(authentication);
 
@@ -55,9 +65,9 @@ public class JwtRestApi {
         return new ResponseEntity<ResponseVo>(response, HttpStatus.OK);
     }
 
-    @PostMapping("/signup")
+    @PostMapping("/api/user/signup")
     public ResponseEntity<String> signup(@RequestBody RequestVo request) {
-        System.out.println("REQUEST >>" + request);
+        System.out.println("REQUEST post /api/user/signup >> " + request);
         userAuthService.saveUser(request);
 
         return new ResponseEntity<String>("User successfully registered", HttpStatus.OK);
