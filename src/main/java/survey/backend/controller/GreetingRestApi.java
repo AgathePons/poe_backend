@@ -26,7 +26,7 @@ public class GreetingRestApi {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/greet/userOrAdmin")
     public ResponseEntity<String> greetingUserOrAdmin() {
-        return new ResponseEntity<String>("Welcome, you have USER and ADMIN role", HttpStatus.OK);
+        return new ResponseEntity<String>("Welcome, you have USER and/or ADMIN role", HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ANONYMOUS')")

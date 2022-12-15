@@ -15,7 +15,7 @@ public class UserRole {
     private Long id;
 
     @Column(name = "role", nullable = false)
-    private String role;
+    private String role = "ROLE_ANONYMOUS";
 
     @JoinColumn(name = "user_id")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
