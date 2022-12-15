@@ -41,8 +41,12 @@ public class JwtUtil {
 
         Date exp = new Date(expMillis);
 
-        return Jwts.builder().setClaims(claims).setIssuedAt(new Date(nowMillis)).setExpiration(exp)
+        String token = Jwts.builder().setClaims(claims).setIssuedAt(new Date(nowMillis)).setExpiration(exp)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
+
+        System.out.println("¯\\_(ツ)_/¯ El FAMOSO TOKEEEEEEEEN :" + token);
+
+        return token;
     }
 
     public void validateToken(final String token) {

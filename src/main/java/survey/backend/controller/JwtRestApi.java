@@ -47,7 +47,6 @@ public class JwtRestApi {
             throw new DisabledUserException("User Inactive");
         }
         // TODO remove sout
-        System.out.println("-------- >> authentification: " + authentication.getPrincipal().getClass());
         System.out.println("-------- >> authentification: " + authentication.getPrincipal());
 
         User user = (User) authentication.getPrincipal();

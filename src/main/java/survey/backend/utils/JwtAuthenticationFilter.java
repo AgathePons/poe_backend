@@ -33,13 +33,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
         String header = request.getHeader("Authorization");
 
-        if (header == null || !header.startsWith("HTTP_TOKEN")) {
+        if (header == null || !header.startsWith("Bearer")) {
             // TODO remove sout
             System.out.println("REQ >> " + request);
+            System.out.println("HEADERS >>>>> " + request.getHeader("Authorization"));
             throw new JwtTokenMissingException("No JWT token found in the request headers");
         }
 
-        String token = header.substring("HTTP_TOKEN".length() + 1);
+        String token = header.substring("Bearer".length() + 1);
 
         jwtUtil.validateToken(token);
 
