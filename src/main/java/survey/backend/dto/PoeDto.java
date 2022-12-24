@@ -4,9 +4,8 @@ import lombok.*;
 
 import survey.backend.entities.Poe;
 
-import survey.backend.entities.PoeType;
+import survey.backend.tools.PoeType;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 @Builder

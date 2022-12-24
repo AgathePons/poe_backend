@@ -2,6 +2,7 @@ package survey.backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import survey.backend.dto.TraineeDto;
 import survey.backend.entities.Trainee;
@@ -29,6 +30,7 @@ public class TraineeController {
    * @return
    */
   @GetMapping
+  @PreAuthorize("hasRole('ADMIN')")
   public Iterable<Trainee> getAll() {
     return traineeService.findAll();
   }
@@ -40,6 +42,7 @@ public class TraineeController {
    * @return the trainee
    */
   @GetMapping("{id}")
+  @PreAuthorize("hasRole('ADMIN')")
   public Trainee getById(@PathVariable("id") int id) {
     Optional<Trainee> optTrainee = traineeService.findById(id);
     if (optTrainee.isPresent()) {
@@ -57,6 +60,7 @@ public class TraineeController {
    * @return trainee corresponding
    */
   @GetMapping("search")
+  @PreAuthorize("hasRole('ADMIN')")
   public Iterable<Trainee> search(
           @RequestParam(name="ln", required = false) String lastName,
           @RequestParam(name="fn", required = false) String firstName
@@ -73,12 +77,11 @@ public class TraineeController {
       throw NoDataFoundError.noResult(ITEM_TYPE, lastName, firstName);
     }
     return traineeService.search(lastName, firstName);
-
-
   }
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
+  @PreAuthorize("hasRole('ADMIN')")
   public Trainee add(@Valid @RequestBody TraineeDto traineeDto) {
     // TODO traineeDto must be validate
     return traineeService.add(traineeDto);
@@ -86,6 +89,7 @@ public class TraineeController {
 
   @DeleteMapping("{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize("hasRole('ADMIN')")
   public void removeById(@PathVariable("id") int id) {
     if(!traineeService.delete(id)) {
       throw NoDataFoundError.withId(ITEM_TYPE, id);
@@ -93,6 +97,7 @@ public class TraineeController {
   }
 
   @PutMapping
+  @PreAuthorize("hasRole('ADMIN')")
   public Trainee update(@Valid @RequestBody TraineeDto traineeDto) {
     return traineeService.update(traineeDto)
             .orElseThrow(() -> NoDataFoundError.withId("Trainee", Math.toIntExact(traineeDto.getId())));
