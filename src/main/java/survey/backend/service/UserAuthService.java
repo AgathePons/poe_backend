@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import survey.backend.entities.User;
 import survey.backend.entities.UserRole;
 import survey.backend.repository.UserRepository;
+import survey.backend.repository.UserRoleRepository;
 import survey.backend.dto.UserRequestDto;
 
 import java.util.List;
@@ -26,6 +27,9 @@ public class UserAuthService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private  UserRoleRepository userRoleRepository;
+
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
@@ -39,19 +43,21 @@ public class UserAuthService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(login, user.getUserPassword(), grantedAuthorities);
     }
 
-    public void saveUser (UserRequestDto userRequestDto) {
-        if (userRepository.findByUserLogin(userRequestDto.getUserLogin()).isPresent()) {
+    public void add(UserRequestDto userDto) {
+        if (userRepository.findByUserLogin(userDto.getUserLogin()).isPresent()) {
             throw new RuntimeException("User already exists");
         }
 
         User user = new User();
-        user.setUserLogin(userRequestDto.getUserLogin());
-        user.setUserPassword(passwordEncoder.encode(userRequestDto.getUserPassword()));
+        user.setUserLogin(userDto.getUserLogin());
+        user.setUserPassword(passwordEncoder.encode(userDto.getUserPassword()));
+        this.userRepository.save(user);
 
-        user.setRoles(userRequestDto.getRoles().stream().map(role -> {
+        user.setRoles(userDto.getRoles().stream().map(role -> {
             UserRole userRole = new UserRole();
             userRole.setRole(role);
             userRole.setUser(user);
+            this.userRoleRepository.save(userRole);
             return userRole;
         }).collect(Collectors.toSet()));
 

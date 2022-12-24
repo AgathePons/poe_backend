@@ -2,6 +2,7 @@ package survey.backend.entities;
 
 import lombok.Getter;
 import lombok.Setter;
+import survey.backend.tools.PoeType;
 
 import javax.persistence.*;
 import java.util.Date;

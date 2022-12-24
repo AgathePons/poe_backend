@@ -25,5 +25,5 @@ public class User {
     private String userPassword;
 
     @OneToMany(mappedBy = "user")
-    private Set<UserRole> roles = new HashSet<UserRole>();
+    private Set<UserRole> roles = new HashSet<>();
 }

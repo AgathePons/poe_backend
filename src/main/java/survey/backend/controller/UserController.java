@@ -4,16 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 // TODO import survey.backend.entities.User;
+import survey.backend.dto.SignupMessage;
 import survey.backend.error.jwt.DisabledUserException;
+import survey.backend.error.jwt.InvalidCredentialsException;
 import survey.backend.service.UserAuthService;
 import survey.backend.components.JwtUtil;
 import survey.backend.dto.UserRequestDto;
@@ -23,8 +23,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin(value = "http://localhost:4200")
-public class JwtRestApi {
+@RequestMapping("api/user")
+public class UserController {
     @Autowired
     private JwtUtil jwtUtil;
 
@@ -34,17 +34,28 @@ public class JwtRestApi {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @PostMapping("/api/user/signin")
+    @GetMapping("{id}")
+    public User findOne(@PathVariable int id) {
+        // TODO
+        throw new RuntimeException("Method not implemented yet");
+    }
+
+    @PostMapping("signin")
     public ResponseEntity<UserResponseDto> generateJwtToken(@RequestBody UserRequestDto request) {
         // TODO remove sout
         System.out.println("REQUEST post /api/user/signin >> " + request);
         Authentication authentication = null;
         try {
             authentication = authenticationManager
-                    .authenticate(new UsernamePasswordAuthenticationToken(request.getUserLogin(), request.getUserPassword()));
+                    .authenticate(
+                            new UsernamePasswordAuthenticationToken(request.getUserLogin(), request.getUserPassword())
+                    );
         } catch (DisabledException e) {
-            throw new DisabledUserException("User Inactive");
+            throw new DisabledUserException();
+        } catch (BadCredentialsException e) {
+            throw new InvalidCredentialsException();
         }
+
         // TODO remove sout
         System.out.println("-------- >> authentification: " + authentication.getPrincipal());
 
@@ -52,10 +63,10 @@ public class JwtRestApi {
 
         Set<String> roles = user.getAuthorities().stream().map(r -> r.getAuthority()).collect(Collectors.toSet());
 
-        // TODO Set<String> roles = user.getUserRoles().stream().map(r -> r.getRole()).collect(Collectors.toSet());
-
+        // Generate token
         String token = jwtUtil.generateToken(authentication);
 
+        // Create response DTO
         UserResponseDto response = new UserResponseDto();
         response.setToken(token);
         response.setRoles(roles.stream().collect(Collectors.toList()));
@@ -63,11 +74,12 @@ public class JwtRestApi {
         return new ResponseEntity<UserResponseDto>(response, HttpStatus.OK);
     }
 
-    @PostMapping("/api/user/signup")
-    public ResponseEntity<String> signup(@RequestBody UserRequestDto request) {
+    @PostMapping("signup")
+    public ResponseEntity<SignupMessage> signup(@RequestBody UserRequestDto request) {
         System.out.println("REQUEST post /api/user/signup >> " + request);
-        userAuthService.saveUser(request);
+        this.userAuthService.add(request);
+        SignupMessage message = new SignupMessage("User was successfully registrated");
 
-        return new ResponseEntity<String>("User successfully registered", HttpStatus.OK);
+        return new ResponseEntity<SignupMessage>(message, HttpStatus.OK);
     }
 }
