@@ -2,6 +2,7 @@ package survey.backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import survey.backend.dto.PoeDto;
 import survey.backend.entities.Poe;
@@ -21,11 +22,13 @@ public class PoeController {
   private PoeService poeService;
 
   @GetMapping
+  @PreAuthorize("hasRole('ADMIN')")
   public Iterable<Poe> findAll() {
     return this.poeService.findAll();
   }
 
   @GetMapping("{id}")
+  @PreAuthorize("hasRole('ADMIN')")
   public Poe getById(@PathVariable("id") int id) {
     Optional<Poe> oPoe = poeService.findById(id);
     if (oPoe.isPresent()) {
@@ -37,6 +40,7 @@ public class PoeController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
+  @PreAuthorize("hasRole('ADMIN')")
   public Poe add(@RequestBody PoeDto poeDto) {
 
     return  poeService.add(poeDto);
@@ -44,6 +48,7 @@ public class PoeController {
 
   @DeleteMapping("{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize("hasRole('ADMIN')")
   public void removeById(@PathVariable("id") int id) {
     if(!poeService.delete(id)) {
       throw NoDataFoundError.withId(ITEM_TYPE, id);
@@ -51,6 +56,7 @@ public class PoeController {
   }
 
   @PutMapping
+  @PreAuthorize("hasRole('ADMIN')")
   public Poe update(@RequestBody PoeDto poeDto) {
     return poeService.update(poeDto)
             .orElseThrow(() -> NoDataFoundError.withId("Poe", Math.toIntExact(poeDto.getId())));
