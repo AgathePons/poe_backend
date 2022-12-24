@@ -31,22 +31,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain
     ) throws ServletException, IOException {
+        // Get HTTP header
         String header = request.getHeader("Authorization");
 
+        // Is a Bearer?
         if (header == null || !header.startsWith("Bearer")) {
             // TODO remove sout
             System.out.println("REQ >> " + request);
             System.out.println("HEADERS >>>>> " + request.getHeader("Authorization"));
-            throw new JwtTokenMissingException("No JWT token found in the request headers");
+            throw new JwtTokenMissingException();
         }
 
         String token = header.substring("Bearer".length() + 1);
 
-        jwtUtil.validateToken(token);
+        String userName = jwtUtil.getUserLogin(token);
 
-        String userLogin = jwtUtil.getLogin(token);
-
-        UserDetails userDetails = userAuthService.loadUserByUsername(userLogin);
+        UserDetails userDetails = userAuthService.loadUserByUsername(userName);
 
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                 userDetails,
@@ -59,8 +59,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (SecurityContextHolder.getContext().getAuthentication() == null) {
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
         }
-
         filterChain.doFilter(request, response);
-
     }
 }
