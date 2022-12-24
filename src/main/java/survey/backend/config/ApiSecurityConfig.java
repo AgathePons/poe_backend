@@ -44,7 +44,7 @@ public class ApiSecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().antMatchers("/api/user/signin", "/api/user/signup", "/api/user/info","/api/user/byusername");
+        return (web) -> web.ignoring().antMatchers("/api/user/**");
     }
 
     @Bean
