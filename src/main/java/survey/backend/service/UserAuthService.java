@@ -1,4 +1,4 @@
-package survey.backend.service.impl;
+package survey.backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -12,13 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 import survey.backend.entities.User;
 import survey.backend.entities.UserRole;
 import survey.backend.repository.UserRepository;
-import survey.backend.vo.RequestVo;
+import survey.backend.repository.UserRoleRepository;
+import survey.backend.dto.UserRequestDto;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserAuthServiceImpl implements UserDetailsService {
+public class UserAuthService implements UserDetailsService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -26,32 +27,37 @@ public class UserAuthServiceImpl implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private  UserRoleRepository userRoleRepository;
+
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        User user = userRepository.findByLogin(login).get();
-        List<UserRole> userRoles = user.getUserRoles().stream().collect(Collectors.toList());
+        User user = userRepository.findByUserLogin(login).get();
+        List<UserRole> userRoles = user.getRoles().stream().collect(Collectors.toList());
 
         List<GrantedAuthority> grantedAuthorities = userRoles.stream().map(role -> {
            return new SimpleGrantedAuthority(role.getRole());
         }).collect(Collectors.toList());
 
-        return new org.springframework.security.core.userdetails.User(login, user.getPassword(), grantedAuthorities);
+        return new org.springframework.security.core.userdetails.User(login, user.getUserPassword(), grantedAuthorities);
     }
 
-    public void saveUser (RequestVo requestVo) {
-        if (userRepository.findByLogin(requestVo.getLogin()).isPresent()) {
+    public void add(UserRequestDto userDto) {
+        if (userRepository.findByUserLogin(userDto.getUserLogin()).isPresent()) {
             throw new RuntimeException("User already exists");
         }
 
         User user = new User();
-        user.setLogin(requestVo.getLogin());
-        user.setPassword(passwordEncoder.encode(requestVo.getPassword()));
+        user.setUserLogin(userDto.getUserLogin());
+        user.setUserPassword(passwordEncoder.encode(userDto.getUserPassword()));
+        this.userRepository.save(user);
 
-        user.setUserRoles(requestVo.getUserRoles().stream().map(role -> {
+        user.setRoles(userDto.getRoles().stream().map(role -> {
             UserRole userRole = new UserRole();
             userRole.setRole(role);
             userRole.setUser(user);
+            this.userRoleRepository.save(userRole);
             return userRole;
         }).collect(Collectors.toSet()));
 
