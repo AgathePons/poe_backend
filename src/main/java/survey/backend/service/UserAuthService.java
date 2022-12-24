@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import survey.backend.entities.User;
 import survey.backend.entities.UserRole;
 import survey.backend.repository.UserRepository;
-import survey.backend.vo.RequestVo;
+import survey.backend.dto.UserRequestDto;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,16 +39,16 @@ public class UserAuthService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(login, user.getUserPassword(), grantedAuthorities);
     }
 
-    public void saveUser (RequestVo requestVo) {
-        if (userRepository.findByUserLogin(requestVo.getLogin()).isPresent()) {
+    public void saveUser (UserRequestDto userRequestDto) {
+        if (userRepository.findByUserLogin(userRequestDto.getUserLogin()).isPresent()) {
             throw new RuntimeException("User already exists");
         }
 
         User user = new User();
-        user.setUserLogin(requestVo.getLogin());
-        user.setUserPassword(passwordEncoder.encode(requestVo.getPassword()));
+        user.setUserLogin(userRequestDto.getUserLogin());
+        user.setUserPassword(passwordEncoder.encode(userRequestDto.getUserPassword()));
 
-        user.setRoles(requestVo.getUserRoles().stream().map(role -> {
+        user.setRoles(userRequestDto.getRoles().stream().map(role -> {
             UserRole userRole = new UserRole();
             userRole.setRole(role);
             userRole.setUser(user);

@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import survey.backend.error.DisabledUserException;
 import survey.backend.service.UserAuthService;
 import survey.backend.utils.JwtUtil;
-import survey.backend.vo.RequestVo;
-import survey.backend.vo.ResponseVo;
+import survey.backend.dto.UserRequestDto;
+import survey.backend.dto.UserResponseDto;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -35,13 +35,13 @@ public class JwtRestApi {
     private AuthenticationManager authenticationManager;
 
     @PostMapping("/api/user/signin")
-    public ResponseEntity<ResponseVo> generateJwtToken(@RequestBody RequestVo request) {
+    public ResponseEntity<UserResponseDto> generateJwtToken(@RequestBody UserRequestDto request) {
         // TODO remove sout
         System.out.println("REQUEST post /api/user/signin >> " + request);
         Authentication authentication = null;
         try {
             authentication = authenticationManager
-                    .authenticate(new UsernamePasswordAuthenticationToken(request.getLogin(), request.getPassword()));
+                    .authenticate(new UsernamePasswordAuthenticationToken(request.getUserLogin(), request.getUserPassword()));
         } catch (DisabledException e) {
             throw new DisabledUserException("User Inactive");
         }
@@ -56,15 +56,15 @@ public class JwtRestApi {
 
         String token = jwtUtil.generateToken(authentication);
 
-        ResponseVo response = new ResponseVo();
+        UserResponseDto response = new UserResponseDto();
         response.setToken(token);
         response.setRoles(roles.stream().collect(Collectors.toList()));
 
-        return new ResponseEntity<ResponseVo>(response, HttpStatus.OK);
+        return new ResponseEntity<UserResponseDto>(response, HttpStatus.OK);
     }
 
     @PostMapping("/api/user/signup")
-    public ResponseEntity<String> signup(@RequestBody RequestVo request) {
+    public ResponseEntity<String> signup(@RequestBody UserRequestDto request) {
         System.out.println("REQUEST post /api/user/signup >> " + request);
         userAuthService.saveUser(request);
 

@@ -21,7 +21,7 @@ public class UserDto {
         user.setUserLogin(this.login);
         user.setUserPassword(this.password);
         // TODO see to fix type issue
-        //user.setUserRoles(this.userRoles);
+        //user.setRoles(this.userRoles);
 
         return user;
     }
