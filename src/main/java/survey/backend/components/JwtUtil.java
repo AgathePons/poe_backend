@@ -1,4 +1,4 @@
-package survey.backend.utils;
+package survey.backend.components;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

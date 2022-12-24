@@ -1,4 +1,4 @@
-package survey.backend.utils;
+package survey.backend.components;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

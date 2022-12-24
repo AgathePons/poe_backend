@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 // TODO import survey.backend.entities.User;
 import survey.backend.error.jwt.DisabledUserException;
 import survey.backend.service.UserAuthService;
-import survey.backend.utils.JwtUtil;
+import survey.backend.components.JwtUtil;
 import survey.backend.dto.UserRequestDto;
 import survey.backend.dto.UserResponseDto;
 
