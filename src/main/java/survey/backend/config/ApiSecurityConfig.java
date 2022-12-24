@@ -1,4 +1,4 @@
-package survey.backend.utils;
+package survey.backend.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -10,23 +10,22 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import survey.backend.service.impl.UserAuthServiceImpl;
+import survey.backend.service.UserAuthService;
+import survey.backend.utils.ApiAuthenticationEntryPoint;
+import survey.backend.utils.JwtAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class ApiSecurityConfig {
     @Autowired
-    private UserAuthServiceImpl userAuthService;
+    private UserAuthService userAuthService;
 
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -63,7 +62,7 @@ public class ApiSecurityConfig {
                 .csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/api/user/signin", "/api/user/signup", "/api/user/info","/api/user/byusername")
+                .antMatchers("/api/user/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

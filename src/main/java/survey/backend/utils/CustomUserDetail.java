@@ -14,8 +14,8 @@ public class CustomUserDetail implements UserDetails {
     Set<GrantedAuthority> authorities=null;
 
     public User getUser() {
-        user.setLogin(this.getUsername());
-        user.setPassword(this.getPassword());
+        user.setUserLogin(this.getUsername());
+        user.setUserPassword(this.getPassword());
         // TODO ??? user.getUserRoles(this.getAuthorities().stream().toList());
         return user;
     }
@@ -36,12 +36,12 @@ public class CustomUserDetail implements UserDetails {
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return user.getUserPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getLogin();
+        return user.getUserLogin();
     }
 
     @Override

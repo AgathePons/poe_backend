@@ -16,14 +16,14 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Long id;
+    private int id;
 
-    @Column(name = "login", nullable = false)
-    private String login;
+    @Column(name = "login", unique = true, nullable = false)
+    private String userLogin;
 
     @Column(name = "password", nullable = false)
-    private String password;
+    private String userPassword;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private Set<UserRole> userRoles = new HashSet<>();
+    @OneToMany(mappedBy = "user")
+    private Set<UserRole> roles = new HashSet<UserRole>();
 }

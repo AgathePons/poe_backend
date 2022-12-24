@@ -8,7 +8,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import survey.backend.error.JwtTokenMissingException;
-import survey.backend.service.impl.UserAuthServiceImpl;
+import survey.backend.service.UserAuthService;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -23,7 +23,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private JwtUtil jwtUtil;
 
     @Autowired
-    private UserAuthServiceImpl userAuthService;
+    private UserAuthService userAuthService;
 
     @Override
     protected void doFilterInternal(

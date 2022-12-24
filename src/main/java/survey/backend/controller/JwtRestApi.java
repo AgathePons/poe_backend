@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 // TODO import survey.backend.entities.User;
 import survey.backend.error.DisabledUserException;
-import survey.backend.service.impl.UserAuthServiceImpl;
-import survey.backend.utils.CustomUserDetail;
+import survey.backend.service.UserAuthService;
 import survey.backend.utils.JwtUtil;
 import survey.backend.vo.RequestVo;
 import survey.backend.vo.ResponseVo;
@@ -30,7 +29,7 @@ public class JwtRestApi {
     private JwtUtil jwtUtil;
 
     @Autowired
-    private UserAuthServiceImpl userAuthService;
+    private UserAuthService userAuthService;
 
     @Autowired
     private AuthenticationManager authenticationManager;
