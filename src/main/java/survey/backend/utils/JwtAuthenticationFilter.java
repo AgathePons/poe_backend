@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import survey.backend.error.JwtTokenMissingException;
+import survey.backend.error.jwt.JwtTokenMissingException;
 import survey.backend.service.UserAuthService;
 
 import javax.servlet.FilterChain;

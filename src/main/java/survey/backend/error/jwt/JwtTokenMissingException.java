@@ -1,4 +1,4 @@
-package survey.backend.error;
+package survey.backend.error.jwt;
 
 import org.springframework.security.core.AuthenticationException;
 

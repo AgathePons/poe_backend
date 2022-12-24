@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 // TODO import survey.backend.entities.User;
-import survey.backend.error.DisabledUserException;
+import survey.backend.error.jwt.DisabledUserException;
 import survey.backend.service.UserAuthService;
 import survey.backend.utils.JwtUtil;
 import survey.backend.dto.UserRequestDto;

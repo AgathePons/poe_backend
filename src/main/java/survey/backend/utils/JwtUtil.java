@@ -8,7 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 //import survey.backend.entities.User;
-import survey.backend.error.JwtTokenMissingException;
+import survey.backend.error.jwt.JwtTokenMissingException;
 
 import java.util.Date;
 
