@@ -30,7 +30,7 @@ public class TraineeController {
    * @return
    */
   @GetMapping
-  @PreAuthorize("hasRole('ADMIN')")
+  //@PreAuthorize("hasRole('ADMIN')")
   public Iterable<Trainee> getAll() {
     return traineeService.findAll();
   }
@@ -42,7 +42,7 @@ public class TraineeController {
    * @return the trainee
    */
   @GetMapping("{id}")
-  @PreAuthorize("hasRole('ADMIN')")
+  //@PreAuthorize("hasRole('ADMIN')")
   public Trainee getById(@PathVariable("id") int id) {
     Optional<Trainee> optTrainee = traineeService.findById(id);
     if (optTrainee.isPresent()) {
@@ -60,7 +60,7 @@ public class TraineeController {
    * @return trainee corresponding
    */
   @GetMapping("search")
-  @PreAuthorize("hasRole('ADMIN')")
+  //@PreAuthorize("hasRole('ADMIN')")
   public Iterable<Trainee> search(
           @RequestParam(name="ln", required = false) String lastName,
           @RequestParam(name="fn", required = false) String firstName
@@ -81,7 +81,7 @@ public class TraineeController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  @PreAuthorize("hasRole('ADMIN')")
+  //@PreAuthorize("hasRole('ADMIN')")
   public Trainee add(@Valid @RequestBody TraineeDto traineeDto) {
     // TODO traineeDto must be validate
     return traineeService.add(traineeDto);
@@ -89,7 +89,7 @@ public class TraineeController {
 
   @DeleteMapping("{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  @PreAuthorize("hasRole('ADMIN')")
+  //@PreAuthorize("hasRole('ADMIN')")
   public void removeById(@PathVariable("id") int id) {
     if(!traineeService.delete(id)) {
       throw NoDataFoundError.withId(ITEM_TYPE, id);
@@ -97,7 +97,7 @@ public class TraineeController {
   }
 
   @PutMapping
-  @PreAuthorize("hasRole('ADMIN')")
+  //@PreAuthorize("hasRole('ADMIN')")
   public Trainee update(@Valid @RequestBody TraineeDto traineeDto) {
     return traineeService.update(traineeDto)
             .orElseThrow(() -> NoDataFoundError.withId("Trainee", Math.toIntExact(traineeDto.getId())));
