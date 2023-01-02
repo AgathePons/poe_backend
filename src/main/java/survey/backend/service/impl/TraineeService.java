@@ -15,44 +15,49 @@ public class TraineeService implements survey.backend.service.TraineeService {
 private TraineeRepository traineeRepository;
 
   @Override
-  public Iterable<Trainee> findAll() {
-    return this.traineeRepository.findAll();
+  public Iterable<TraineeDto> findAll() {
+    //return this.traineeRepository.findAll();
+    return null;
   }
 
   @Override
-  public Optional<Trainee> findById(int id) {
-    return this.traineeRepository.findById((long) id);
+  public Optional<TraineeDto> findById(long id) {
+    //return this.traineeRepository.findById((long) id);
+    return null;
   }
 
   @Override
-  public Iterable<Trainee> search(String lastName, String firstName) {
+  public Iterable<TraineeDto> search(String lastName, String firstName) {
     if (lastName != null && firstName != null) {
-      return this.traineeRepository.listByLastNameFirstName(lastName, firstName);
+      //return this.traineeRepository.listByLastNameFirstName(lastName, firstName);
     }
     if (lastName != null && firstName == null) {
-      return this.traineeRepository.findByLastName(lastName);
+      //return this.traineeRepository.findByLastName(lastName);
     }
-    return this.traineeRepository.findByFirstName(firstName);
+    //return this.traineeRepository.findByFirstName(firstName);
+    return null;
   }
 
   @Override
-  public Trainee add(TraineeDto traineeDto) {
-    return this.traineeRepository.save(traineeDto.toTrainee());
+  public TraineeDto add(TraineeDto traineeDto) {
+    //return this.traineeRepository.save(traineeDto.toTrainee());
+    return null;
   }
 
   @Override
-  public Optional<Trainee> update(TraineeDto traineeDto) {
+  public Optional<TraineeDto> update(TraineeDto traineeDto) {
     Trainee trainee = traineeDto.toTrainee();
     Optional<Trainee> oTrainee = this.traineeRepository.findById(trainee.getId());
     if (oTrainee.isPresent()) {
       this.traineeRepository.save(trainee);
-      return Optional.of(trainee);
+      //return Optional.of(trainee);
     }
-    return Optional.empty();
+    //return Optional.empty();
+    return null;
   }
 
   @Override
-  public boolean delete(int id) {
+  public boolean delete(long id) {
     Optional<Trainee> traineeToDelete = this.traineeRepository.findById((long) id);
     if(traineeToDelete.isPresent()) {
       this.traineeRepository.delete(traineeToDelete.get());

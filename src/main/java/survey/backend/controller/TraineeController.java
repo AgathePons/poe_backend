@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import survey.backend.dto.TraineeDto;
-import survey.backend.entities.Trainee;
 import survey.backend.error.BadRequestError;
 import survey.backend.error.NoDataFoundError;
 import survey.backend.service.TraineeService;
@@ -31,7 +30,7 @@ public class TraineeController {
    */
   @GetMapping
   //@PreAuthorize("hasRole('ADMIN')")
-  public Iterable<Trainee> getAll() {
+  public Iterable<TraineeDto> getAll() {
     return traineeService.findAll();
   }
 
@@ -43,8 +42,8 @@ public class TraineeController {
    */
   @GetMapping("{id}")
   //@PreAuthorize("hasRole('ADMIN')")
-  public Trainee getById(@PathVariable("id") int id) {
-    Optional<Trainee> optTrainee = traineeService.findById(id);
+  public TraineeDto getById(@PathVariable("id") long id) {
+    Optional<TraineeDto> optTrainee = traineeService.findById(id);
     if (optTrainee.isPresent()) {
       return optTrainee.get();
     } else {
@@ -61,7 +60,7 @@ public class TraineeController {
    */
   @GetMapping("search")
   //@PreAuthorize("hasRole('ADMIN')")
-  public Iterable<Trainee> search(
+  public Iterable<TraineeDto> search(
           @RequestParam(name="ln", required = false) String lastName,
           @RequestParam(name="fn", required = false) String firstName
   ) {
@@ -69,7 +68,7 @@ public class TraineeController {
       throw BadRequestError.withNoArgs(ITEM_TYPE);
     }
 
-    List<Trainee> trainees = StreamSupport.stream(
+    List<TraineeDto> trainees = StreamSupport.stream(
             traineeService.search(lastName, firstName).spliterator(), false
     ).toList();
 
@@ -82,7 +81,7 @@ public class TraineeController {
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   //@PreAuthorize("hasRole('ADMIN')")
-  public Trainee add(@Valid @RequestBody TraineeDto traineeDto) {
+  public TraineeDto add(@Valid @RequestBody TraineeDto traineeDto) {
     // TODO traineeDto must be validate
     return traineeService.add(traineeDto);
   }
@@ -90,7 +89,7 @@ public class TraineeController {
   @DeleteMapping("{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   //@PreAuthorize("hasRole('ADMIN')")
-  public void removeById(@PathVariable("id") int id) {
+  public void removeById(@PathVariable("id") long id) {
     if(!traineeService.delete(id)) {
       throw NoDataFoundError.withId(ITEM_TYPE, id);
     }
@@ -98,7 +97,7 @@ public class TraineeController {
 
   @PutMapping
   //@PreAuthorize("hasRole('ADMIN')")
-  public Trainee update(@Valid @RequestBody TraineeDto traineeDto) {
+  public TraineeDto update(@Valid @RequestBody TraineeDto traineeDto) {
     return traineeService.update(traineeDto)
             .orElseThrow(() -> NoDataFoundError.withId("Trainee", Math.toIntExact(traineeDto.getId())));
   }

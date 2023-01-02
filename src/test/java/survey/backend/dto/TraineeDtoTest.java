@@ -3,6 +3,7 @@ package survey.backend.dto;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,12 +23,12 @@ class TraineeDtoTest {
 
   @Test
   void testAllArgsConstructor() {
-    int id = 666;
+    long id = 666;
     String lastname = "Durand";
     String firstname = "Jean";
     String email = "jeanmi@mail.com";
     String phoneNumber = "0625487556";
-    var birthdate = LocalDate.of(1975, 7, 12);
+    var birthdate = new Date(1975, 7, 12);
     var traineeDto = new TraineeDto(id, lastname, firstname, email, phoneNumber, birthdate);
     assertAll(
             () -> assertEquals(id, traineeDto.getId(), "id"),
@@ -43,7 +44,7 @@ class TraineeDtoTest {
   void testBuilder() {
     String firstname = "Jean";
     String email = "jeanmi@mail.com";
-    var birthdate = LocalDate.of(1975, 7, 5);
+    var birthdate = new Date(1975, 7, 5);
     var traineeDto = TraineeDto.builder()
             .firstName(firstname)
             .email(email)

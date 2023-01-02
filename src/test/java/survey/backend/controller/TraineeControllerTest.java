@@ -36,7 +36,7 @@ class TraineeControllerTest {
   @Test
   void testGetByIdOk() throws Exception {
     // given
-    int id = 123;
+    long id = 123L;
     String lastname = "Doe";
     String firstname = "John";
     var traineeDto = TraineeDto.builder()
@@ -67,7 +67,7 @@ class TraineeControllerTest {
   @Test
   void testGetByIdKoNotFound() throws Exception {
     // given
-    int id = 0;
+    long id = 0L;
     BDDMockito.given(traineeService.findById(id))
             .willReturn(Optional.empty());
 
