@@ -7,19 +7,21 @@ import survey.backend.entities.Trainee;
 
 public interface TraineeRepository extends CrudRepository<Trainee, Long> {
 
+  // Native SQL
   @Query(
           value = "SELECT * FROM trainee WHERE last_name = :lastName AND first_name = :firstName",
           nativeQuery = true
   )
-  public Iterable<Trainee> listByLastNameFirstName(
+  Iterable<Trainee> listByLastNameFirstName(
           @Param(value="lastName") String lastName,
           @Param(value = "firstName") String firstName
   );
 
+  // JPQL/HQL
   @Query(
           value = "SELECT t FROM Trainee t WHERE t.lastName = :lastName AND t.firstName = :firstName"
   )
-  public Iterable<Trainee> anotherListByLastNameFirstName(
+  Iterable<Trainee> anotherListByLastNameFirstName(
           @Param(value="lastName") String lastName,
           @Param(value = "firstName") String firstName
   );

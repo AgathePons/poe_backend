@@ -28,20 +28,25 @@ private ModelMapper modelMapper;
 
   @Override
   public Optional<TraineeDto> findById(long id) {
-    //return this.traineeRepository.findById((long) id);
-    return null;
+    return this.traineeRepository.findById(id)
+            .map(traineeEntity -> modelMapper.map(traineeEntity, TraineeDto.class));
   }
 
   @Override
   public Iterable<TraineeDto> search(String lastName, String firstName) {
     if (lastName != null && firstName != null) {
-      //return this.traineeRepository.listByLastNameFirstName(lastName, firstName);
+      return StreamUtils.toStream(this.traineeRepository.listByLastNameFirstName(lastName, firstName))
+              .map(traineeEntity -> modelMapper.map(traineeEntity, TraineeDto.class))
+              .toList();
     }
     if (lastName != null && firstName == null) {
-      //return this.traineeRepository.findByLastName(lastName);
+      return StreamUtils.toStream(this.traineeRepository.findByLastName(lastName))
+              .map(traineeEntity -> modelMapper.map(traineeEntity, TraineeDto.class))
+              .toList();
     }
-    //return this.traineeRepository.findByFirstName(firstName);
-    return null;
+    return StreamUtils.toStream(this.traineeRepository.findByFirstName(firstName))
+            .map(traineeEntity -> modelMapper.map(traineeEntity, TraineeDto.class))
+            .toList();
   }
 
   @Override
