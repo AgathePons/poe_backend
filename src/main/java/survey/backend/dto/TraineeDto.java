@@ -1,5 +1,6 @@
 package survey.backend.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import survey.backend.entities.Trainee;
 
@@ -22,6 +23,7 @@ public class TraineeDto {
   private String email;
   @Pattern(regexp = "^[\\+]?[(]?\\d{3}[)]?[-\\s\\.]?\\d{3}[-\\s\\.]?\\d{4,6}$")
   private String phoneNumber;
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   @Past
   private Date birthDate;
 
