@@ -1,7 +1,9 @@
 package survey.backend.service.impl;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import survey.backend.components.StreamUtils;
 import survey.backend.dto.TraineeDto;
 import survey.backend.entities.Trainee;
 import survey.backend.repository.TraineeRepository;
@@ -14,10 +16,14 @@ public class TraineeService implements survey.backend.service.TraineeService {
 @Autowired
 private TraineeRepository traineeRepository;
 
+@Autowired
+private ModelMapper modelMapper;
+
   @Override
   public Iterable<TraineeDto> findAll() {
-    //return this.traineeRepository.findAll();
-    return null;
+    return StreamUtils.toStream(this.traineeRepository.findAll())
+            .map(traineeEntity -> modelMapper.map(traineeEntity, TraineeDto.class))
+            .toList();
   }
 
   @Override

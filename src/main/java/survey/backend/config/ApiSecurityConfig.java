@@ -45,7 +45,7 @@ public class ApiSecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().antMatchers(
-                "/api/**"
+                "/api/user/**"
         );
     }
 
