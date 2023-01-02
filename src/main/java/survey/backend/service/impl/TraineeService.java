@@ -51,25 +51,27 @@ private ModelMapper modelMapper;
 
   @Override
   public TraineeDto add(TraineeDto traineeDto) {
-    //return this.traineeRepository.save(traineeDto.toTrainee());
-    return null;
+    var traineeEntity = modelMapper.map(traineeDto, Trainee.class);
+    this.traineeRepository.save(traineeEntity);
+    return modelMapper.map(traineeEntity, TraineeDto.class);
   }
 
   @Override
   public Optional<TraineeDto> update(TraineeDto traineeDto) {
-    Trainee trainee = traineeDto.toTrainee();
-    Optional<Trainee> oTrainee = this.traineeRepository.findById(trainee.getId());
-    if (oTrainee.isPresent()) {
-      this.traineeRepository.save(trainee);
-      //return Optional.of(trainee);
-    }
-    //return Optional.empty();
-    return null;
+    return this.traineeRepository.findById(traineeDto.getId())
+            .map(traineeEntity -> {
+              // update entity object with DTO fields
+              modelMapper.map(traineeDto, traineeEntity);
+              // update in DB
+              traineeRepository.save(traineeEntity);
+              // transform entity updated in DTO
+              return modelMapper.map(traineeEntity, TraineeDto.class);
+            });
   }
 
   @Override
   public boolean delete(long id) {
-    Optional<Trainee> traineeToDelete = this.traineeRepository.findById((long) id);
+    Optional<Trainee> traineeToDelete = this.traineeRepository.findById(id);
     if(traineeToDelete.isPresent()) {
       this.traineeRepository.delete(traineeToDelete.get());
       return true;
