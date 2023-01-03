@@ -2,20 +2,20 @@ package survey.backend.service;
 
 import survey.backend.dto.TraineeDto;
 
+import java.util.Collection;
 import java.util.Optional;
-import java.util.Set;
 
 public interface TraineeService {
   /**
    * find all trainees
-   * @return
+   * @return collection of trainees
    */
-  Iterable<TraineeDto> findAll();
+  Collection<TraineeDto> findAll();
 
   /**
-   *
+   * find one traine by id
    * @param id
-   * @return
+   * @return optional of trainee
    */
   Optional<TraineeDto> findById(long id);
 
@@ -27,7 +27,7 @@ public interface TraineeService {
    * @return trainee set with this lastname (if not null) and this firstname (if not null)
    * empty set if no trainee found with these criteria or both criteria are null
    */
-  Iterable<TraineeDto> search(String lastName, String firstName);
+  Collection<TraineeDto> search(String lastName, String firstName);
 
   /**
    * add new trainee

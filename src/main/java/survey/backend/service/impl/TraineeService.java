@@ -8,6 +8,7 @@ import survey.backend.dto.TraineeDto;
 import survey.backend.entities.Trainee;
 import survey.backend.repository.TraineeRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,7 +21,7 @@ private TraineeRepository traineeRepository;
 private ModelMapper modelMapper;
 
   @Override
-  public Iterable<TraineeDto> findAll() {
+  public List<TraineeDto> findAll() {
     return StreamUtils.toStream(this.traineeRepository.findAll())
             .map(traineeEntity -> modelMapper.map(traineeEntity, TraineeDto.class))
             .toList();
@@ -33,7 +34,7 @@ private ModelMapper modelMapper;
   }
 
   @Override
-  public Iterable<TraineeDto> search(String lastName, String firstName) {
+  public List<TraineeDto> search(String lastName, String firstName) {
     if (lastName != null && firstName != null) {
       return StreamUtils.toStream(this.traineeRepository.listByLastNameFirstName(lastName, firstName))
               .map(traineeEntity -> modelMapper.map(traineeEntity, TraineeDto.class))

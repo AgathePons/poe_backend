@@ -1,50 +1,65 @@
 package survey.backend.service.impl;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import survey.backend.components.StreamUtils;
 import survey.backend.dto.PoeDto;
-import survey.backend.dto.TraineeDto;
 import survey.backend.entities.Poe;
-import survey.backend.entities.Trainee;
 import survey.backend.repository.PoeRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
-public class PoeService {
+public class PoeService implements survey.backend.service.PoeService {
 
   @Autowired
   private PoeRepository poeRepository;
 
-  public Iterable<Poe> findAll() {
-    return this.poeRepository.findAll();
+  @Autowired
+  private ModelMapper modelMapper;
+
+  @Override
+  public List<PoeDto> findAll() {
+    return StreamUtils.toStream(this.poeRepository.findAll())
+            .map(poeEntity -> modelMapper.map(poeEntity, PoeDto.class))
+            .toList();
   }
 
-  public Optional<Poe> findById(int id) {
-    return this.poeRepository.findById((long) id);
+  @Override
+  public Optional<PoeDto> findById(long id) {
+    return this.poeRepository.findById(id)
+            .map(poeEntity -> modelMapper.map(poeEntity, PoeDto.class));
   }
 
-  public boolean delete(int id) {
-    Optional<Poe> poeToDelete = this.poeRepository.findById((long) id);
-    if (poeToDelete.isPresent()) {
-      this.poeRepository.delete(poeToDelete.get());
+  @Override
+  public PoeDto add(PoeDto poeDto) {
+    var poeEntity = modelMapper.map(poeDto, Poe.class);
+    this.poeRepository.save(poeEntity);
+    return modelMapper.map(poeEntity, PoeDto.class);
+  }
+
+  @Override
+  public Optional<PoeDto> update(PoeDto poeDto) {
+    return this.poeRepository.findById(poeDto.getId())
+            .map(poeEntity -> {
+              // update entity object with DTO fields
+              modelMapper.map(poeDto, poeEntity);
+              // update in DB
+              poeRepository.save(poeEntity);
+              // transform entity updated in DTO
+              return modelMapper.map(poeEntity, PoeDto.class);
+            });
+  }
+
+  @Override
+  public boolean delete(long id) {
+    var poeOptional = this.poeRepository.findById(id)
+            .map(poeEntity -> modelMapper.map(poeEntity, PoeDto.class));
+    if (poeOptional.isPresent()) {
       return true;
     }
     return false;
-  }
-
-  public Poe add(PoeDto poeDto) {
-    return this.poeRepository.save(poeDto.toPoe());
-
-  }
-
-  public Optional<Poe> update(PoeDto poeDto) {
-    Poe poe = poeDto.toPoe();
-    Optional<Poe> oPoe = this.poeRepository.findById(poe.getId());
-    if (oPoe.isPresent()) {
-      this.poeRepository.save(poe);
-      return Optional.of(poe);
-    }
-    return Optional.empty();
   }
 }
