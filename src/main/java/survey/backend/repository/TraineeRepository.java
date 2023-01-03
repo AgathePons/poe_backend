@@ -5,21 +5,25 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import survey.backend.entities.Trainee;
 
+import java.util.List;
+
 public interface TraineeRepository extends CrudRepository<Trainee, Long> {
 
+  // Native SQL
   @Query(
           value = "SELECT * FROM trainee WHERE last_name = :lastName AND first_name = :firstName",
           nativeQuery = true
   )
-  public Iterable<Trainee> listByLastNameFirstName(
+  List<Trainee> listByLastNameFirstName(
           @Param(value="lastName") String lastName,
           @Param(value = "firstName") String firstName
   );
 
+  // JPQL/HQL
   @Query(
           value = "SELECT t FROM Trainee t WHERE t.lastName = :lastName AND t.firstName = :firstName"
   )
-  public Iterable<Trainee> anotherListByLastNameFirstName(
+  List<Trainee> anotherListByLastNameFirstName(
           @Param(value="lastName") String lastName,
           @Param(value = "firstName") String firstName
   );
@@ -41,8 +45,8 @@ public interface TraineeRepository extends CrudRepository<Trainee, Long> {
 //  );
 
   // jpa provides findByFoo(foo) methods to find by attributes
-  Iterable<Trainee> findByLastName(String lastName);
+  List<Trainee> findByLastName(String lastName);
 
-  Iterable<Trainee> findByFirstName(String firstName);
+  List<Trainee> findByFirstName(String firstName);
 
 }
