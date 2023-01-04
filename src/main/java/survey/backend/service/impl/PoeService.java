@@ -6,8 +6,10 @@ import org.springframework.stereotype.Service;
 import survey.backend.components.StreamUtils;
 import survey.backend.dto.PoeDto;
 import survey.backend.dto.PoeFullDto;
+import survey.backend.dto.TraineeDto;
 import survey.backend.entities.Poe;
 import survey.backend.repository.PoeRepository;
+import survey.backend.repository.TraineeRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +19,9 @@ public class PoeService implements survey.backend.service.PoeService {
 
   @Autowired
   private PoeRepository poeRepository;
+
+  @Autowired
+  private TraineeRepository traineeRepository;
 
   @Autowired
   private ModelMapper modelMapper;
@@ -52,6 +57,18 @@ public class PoeService implements survey.backend.service.PoeService {
               // transform entity updated in DTO
               return modelMapper.map(poeEntity, PoeDto.class);
             });
+  }
+
+  @Override
+  public Optional<PoeFullDto> addTrainee(long poeId, long traineeId) {
+    return poeRepository.findById(poeId)
+            .flatMap(poeEntity -> traineeRepository.findById(traineeId)
+                    .map(traineeEntity -> {
+                      poeEntity.getTrainees().add(traineeEntity);
+                      poeRepository.save(poeEntity);
+                      return modelMapper.map(poeEntity, PoeFullDto.class);
+                    })
+            );
   }
 
   @Override

@@ -5,9 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import survey.backend.dto.PoeDto;
 import survey.backend.dto.PoeFullDto;
-import survey.backend.entities.Poe;
+import survey.backend.dto.TraineeDto;
 import survey.backend.error.NoDataFoundError;
 import survey.backend.service.impl.PoeService;
+import survey.backend.service.impl.TraineeService;
 
 import java.util.Optional;
 
@@ -19,6 +20,9 @@ public class PoeController {
 
   @Autowired
   private PoeService poeService;
+
+  @Autowired
+  private TraineeService traineeService;
 
   @GetMapping
   //@PreAuthorize("hasRole('ADMIN')")
@@ -63,14 +67,22 @@ public class PoeController {
   // TODO add method to add / remove trainee from poe
   @PatchMapping("{poeId}/add/{traineeId}")
 //@PreAuthorize("hasRole('ADMIN')")
-  public PoeFullDto addOneTrainee(@PathVariable("poeId") long poeId , @PathVariable("traineeId") long traineeId) {
-    System.out.println("===>>> POE: " + poeId);
-    System.out.println("===>>> trainee: " + traineeId);
-    Optional<PoeFullDto> optPoe = poeService.findById(4L);
+  public Optional<PoeFullDto> addOneTrainee(@PathVariable("poeId") long poeId , @PathVariable("traineeId") long traineeId) {
+    // check if poe and trainee exist
+    Optional<PoeFullDto> optPoe = poeService.findById(poeId);
+    Optional<TraineeDto> optTrainee = traineeService.findById(traineeId);
     if (optPoe.isPresent()) {
-      return optPoe.get();
+      if (optTrainee.isPresent()) {
+        System.out.println("===>>> POE: " + optPoe.get().getTitle());
+        System.out.println("===>>> trainee: " + optTrainee.get().getFirstName() + ' ' + optTrainee.get().getLastName());
+        // update the poe
+        return poeService.addTrainee(poeId, traineeId);
+      }
+      // if trainee not found
+      throw NoDataFoundError.withId("Trainee", traineeId);
     } else {
-      throw NoDataFoundError.withId(ITEM_TYPE, 4L);
+      // if poe not found
+      throw NoDataFoundError.withId(ITEM_TYPE, poeId);
     }
   }
 }
