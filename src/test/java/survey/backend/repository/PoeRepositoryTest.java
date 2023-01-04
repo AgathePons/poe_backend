@@ -18,8 +18,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-@ActiveProfiles("testu")
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@ActiveProfiles("testu") // use the application.properties TU file
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // prevent to replace DB
 public class PoeRepositoryTest {
   @Autowired
   PoeRepository poeRepository;

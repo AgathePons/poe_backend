@@ -22,6 +22,7 @@ public class Trainee {
   private String firstName;
 
   @Column(name="birth_date", nullable = true)
+  @Temporal(TemporalType.DATE)
   private Date birthDate;
 
   @Column(unique = true, nullable = false)

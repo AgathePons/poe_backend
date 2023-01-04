@@ -10,7 +10,7 @@ public interface PoeService {
    * find all poes
    * @return collection of poes
    */
-  Collection<PoeDto> findAll();
+  Collection<PoeDto> findAll();// TODO replace for a DTO without trainees with smart use of inheritance
 
   /**
    * find one poe by id

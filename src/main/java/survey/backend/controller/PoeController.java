@@ -59,3 +59,5 @@ public class PoeController {
             .orElseThrow(() -> NoDataFoundError.withId("Poe", Math.toIntExact(poeDto.getId())));
   }
 }
+
+// TODO add method to add / remove trainee from poe
