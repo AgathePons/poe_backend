@@ -4,9 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import survey.backend.dto.PoeDto;
-import survey.backend.entities.Poe;
+import survey.backend.dto.PoeFullDto;
+import survey.backend.dto.TraineeDto;
 import survey.backend.error.NoDataFoundError;
 import survey.backend.service.impl.PoeService;
+import survey.backend.service.impl.TraineeService;
 
 import java.util.Optional;
 
@@ -19,6 +21,9 @@ public class PoeController {
   @Autowired
   private PoeService poeService;
 
+  @Autowired
+  private TraineeService traineeService;
+
   @GetMapping
   //@PreAuthorize("hasRole('ADMIN')")
   public Iterable<PoeDto> getAll() {
@@ -28,7 +33,7 @@ public class PoeController {
   @GetMapping("{id}")
   //@PreAuthorize("hasRole('ADMIN')")
   public PoeDto getById(@PathVariable("id") long id) {
-    Optional<PoeDto> optPoe = poeService.findById(id);
+    Optional<PoeFullDto> optPoe = poeService.findById(id);
     if (optPoe.isPresent()) {
       return optPoe.get();
     } else {
@@ -58,4 +63,27 @@ public class PoeController {
     return poeService.update(poeDto)
             .orElseThrow(() -> NoDataFoundError.withId("Poe", Math.toIntExact(poeDto.getId())));
   }
+
+  // TODO add method to add / remove trainee from poe
+  @PatchMapping("{poeId}/add/{traineeId}")
+//@PreAuthorize("hasRole('ADMIN')")
+  public Optional<PoeFullDto> addOneTrainee(@PathVariable("poeId") long poeId , @PathVariable("traineeId") long traineeId) {
+    // check if poe and trainee exist
+    Optional<PoeFullDto> optPoe = poeService.findById(poeId);
+    Optional<TraineeDto> optTrainee = traineeService.findById(traineeId);
+    if (optPoe.isPresent()) {
+      if (optTrainee.isPresent()) {
+        System.out.println("===>>> POE: " + optPoe.get().getTitle());
+        System.out.println("===>>> trainee: " + optTrainee.get().getFirstName() + ' ' + optTrainee.get().getLastName());
+        // update the poe
+        return poeService.addTrainee(poeId, traineeId);
+      }
+      // if trainee not found
+      throw NoDataFoundError.withId("Trainee", traineeId);
+    } else {
+      // if poe not found
+      throw NoDataFoundError.withId(ITEM_TYPE, poeId);
+    }
+  }
 }
+
