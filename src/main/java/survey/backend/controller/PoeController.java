@@ -85,5 +85,26 @@ public class PoeController {
       throw NoDataFoundError.withId(ITEM_TYPE, poeId);
     }
   }
+
+  @PatchMapping("{poeId}/remove/{traineeId}")
+//@PreAuthorize("hasRole('ADMIN')")
+  public Optional<PoeFullDto> removeOneTrainee(@PathVariable("poeId") long poeId , @PathVariable("traineeId") long traineeId) {
+    // check if poe and trainee exist
+    Optional<PoeFullDto> optPoe = poeService.findById(poeId);
+    Optional<TraineeDto> optTrainee = traineeService.findById(traineeId);
+    if (optPoe.isPresent()) {
+      if (optTrainee.isPresent()) {
+        System.out.println("===>>> POE: " + optPoe.get().getTitle());
+        System.out.println("===>>> trainee: " + optTrainee.get().getFirstName() + ' ' + optTrainee.get().getLastName());
+        // update the poe
+        return poeService.removeTrainee(poeId, traineeId);
+      }
+      // if trainee not found
+      throw NoDataFoundError.withId("Trainee", traineeId);
+    } else {
+      // if poe not found
+      throw NoDataFoundError.withId(ITEM_TYPE, poeId);
+    }
+  }
 }
 

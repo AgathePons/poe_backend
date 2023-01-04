@@ -72,6 +72,18 @@ public class PoeService implements survey.backend.service.PoeService {
   }
 
   @Override
+  public Optional<PoeFullDto> removeTrainee(long poeId, long traineeId) {
+    return poeRepository.findById(poeId)
+            .flatMap(poeEntity -> traineeRepository.findById(traineeId)
+                    .map(traineeEntity -> {
+                      poeEntity.getTrainees().remove(traineeEntity);
+                      poeRepository.save(poeEntity);
+                      return modelMapper.map(poeEntity, PoeFullDto.class);
+                    })
+            );
+  }
+
+  @Override
   public boolean delete(long id) {
     var poeOptional = this.poeRepository.findById(id)
             .map(poeEntity -> modelMapper.map(poeEntity, PoeDto.class));

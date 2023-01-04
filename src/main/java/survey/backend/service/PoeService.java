@@ -43,6 +43,14 @@ public interface PoeService {
   Optional<PoeFullDto> addTrainee(long poeId, long traineeId);
 
   /**
+   * update one poe remove trainee
+   * @param poeId
+   * @param traineeId
+   * @return poe updated if found, else optional empty
+   */
+  Optional<PoeFullDto> removeTrainee(long poeId, long traineeId);
+
+  /**
    * delete one poe by id
    * @param id
    * @return true if found and deleted, false if not found
