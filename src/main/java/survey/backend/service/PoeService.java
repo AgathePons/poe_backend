@@ -1,6 +1,7 @@
 package survey.backend.service;
 
 import survey.backend.dto.PoeDto;
+import survey.backend.dto.PoeFullDto;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -17,7 +18,7 @@ public interface PoeService {
    * @param id
    * @return optional of poe
    */
-  Optional<PoeDto> findById(long id);
+  Optional<PoeFullDto> findById(long id);
 
   /**
    * add one new poe
@@ -32,6 +33,8 @@ public interface PoeService {
    * @return poe updated if found, else optional empty
    */
   Optional<PoeDto> update(PoeDto poeDto);
+
+  // TODO Optional<PoeFullDto> updateAddTraineeById(long id)
 
   /**
    * delete one poe by id

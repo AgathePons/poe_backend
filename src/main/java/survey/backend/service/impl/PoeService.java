@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import survey.backend.components.StreamUtils;
 import survey.backend.dto.PoeDto;
+import survey.backend.dto.PoeFullDto;
 import survey.backend.entities.Poe;
 import survey.backend.repository.PoeRepository;
 
@@ -28,9 +29,9 @@ public class PoeService implements survey.backend.service.PoeService {
   }
 
   @Override
-  public Optional<PoeDto> findById(long id) {
+  public Optional<PoeFullDto> findById(long id) {
     return this.poeRepository.findById(id)
-            .map(poeEntity -> modelMapper.map(poeEntity, PoeDto.class));
+            .map(poeEntity -> modelMapper.map(poeEntity, PoeFullDto.class));
   }
 
   @Override

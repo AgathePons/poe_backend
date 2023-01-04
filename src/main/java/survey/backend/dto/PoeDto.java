@@ -22,5 +22,5 @@ public class PoeDto {
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   private Date endDate;
   private PoeType type;
-  private Set<Trainee> trainees;
+  // TODO private Set<Trainee> trainees;
 }
