@@ -11,6 +11,7 @@ import survey.backend.entities.Poe;
 import survey.backend.repository.PoeRepository;
 import survey.backend.repository.TraineeRepository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,6 +70,24 @@ public class PoeService implements survey.backend.service.PoeService {
                       return modelMapper.map(poeEntity, PoeFullDto.class);
                     })
             );
+  }
+
+  @Override
+  public Optional<PoeFullDto> addTrainees(long poeId, Collection<Long> traineeIds) {
+    return poeRepository.findById(poeId)
+            .flatMap(poeEntity -> {
+              var traineeEntities = StreamUtils.toStream(traineeRepository.findAllById(traineeIds)).toList();
+              if (traineeIds.size() != traineeEntities.size()) {
+                // if at least one trainee not found
+                return Optional.empty();
+              }
+              // add trainees
+              poeEntity.getTrainees().addAll(traineeEntities);
+              // save
+              poeRepository.save(poeEntity);
+              // return
+              return Optional.of(modelMapper.map(poeEntity, PoeFullDto.class));
+            });
   }
 
   @Override

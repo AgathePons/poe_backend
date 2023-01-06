@@ -10,6 +10,7 @@ import survey.backend.error.NoDataFoundError;
 import survey.backend.service.impl.PoeService;
 import survey.backend.service.impl.TraineeService;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -106,5 +107,18 @@ public class PoeController {
       throw NoDataFoundError.withId(ITEM_TYPE, poeId);
     }
   }
+
+  @PatchMapping("/{poeId}/addTrainees")
+  public PoeFullDto addTrainees(
+          @PathVariable("poeId") long poeId,
+          @RequestBody List<Long> traineeIds
+  ){
+    return poeService.addTrainees(poeId, traineeIds)
+            .orElseThrow(() -> {
+              throw NoDataFoundError.withIds("Poe or trainees",
+                      poeId);
+            });
+  }
 }
+
 
