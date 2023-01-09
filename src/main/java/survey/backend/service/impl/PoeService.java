@@ -104,11 +104,11 @@ public class PoeService implements survey.backend.service.PoeService {
 
   @Override
   public boolean delete(long id) {
-    var poeOptional = this.poeRepository.findById(id)
-            .map(poeEntity -> modelMapper.map(poeEntity, PoeDto.class));
-    if (poeOptional.isPresent()) {
-      return true;
-    }
-    return false;
+    return poeRepository.findById(id)
+            .map(poeEntity -> {
+                poeRepository.delete(poeEntity);
+                return true;
+            })
+            .orElse(false);
   }
 }
