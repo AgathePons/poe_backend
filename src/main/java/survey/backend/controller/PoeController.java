@@ -33,13 +33,9 @@ public class PoeController {
 
   @GetMapping("{id}")
   //@PreAuthorize("hasRole('ADMIN')")
-  public PoeDto getById(@PathVariable("id") long id) {
-    Optional<PoeFullDto> optPoe = poeService.findById(id);
-    if (optPoe.isPresent()) {
-      return optPoe.get();
-    } else {
-      throw NoDataFoundError.withId(ITEM_TYPE, id);
-    }
+  public PoeFullDto getById(@PathVariable("id") long id) {
+    return poeService.findById(id)
+            .orElseThrow(() -> NoDataFoundError.withId(ITEM_TYPE, id));
   }
 
   @PostMapping

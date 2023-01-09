@@ -41,37 +41,39 @@ public class UserController {
     }
 
     @PostMapping("signin")
-    public ResponseEntity<UserResponseDto> generateJwtToken(@RequestBody UserRequestDto request) {
+    public UserResponseDto generateJwtToken(@RequestBody UserRequestDto request) {
         // TODO remove sout
         System.out.println("REQUEST post /api/user/signin >> " + request);
-        Authentication authentication = null;
         try {
-            authentication = authenticationManager
+            Authentication  authentication = this.authenticationManager
                     .authenticate(
-                            new UsernamePasswordAuthenticationToken(request.getUserLogin(), request.getUserPassword())
+                            new UsernamePasswordAuthenticationToken(
+                                    request.getUserLogin(),
+                                    request.getUserPassword()
+                            )
                     );
+            // Got a Spring Security User
+            User user = (User) authentication.getPrincipal();
+
+            Set<String> roles = user
+                    .getAuthorities()
+                    .stream().map(r -> r.getAuthority())
+                    .collect(Collectors.toSet());
+
+            // Make a token from "authentication" object
+            String token = jwtUtil.generateToken(authentication);
+
+            // Create a Response DTO to send to client
+            UserResponseDto response = new UserResponseDto();
+            response.setToken(token);
+            response.setRoles(roles.stream().collect(Collectors.toList()));
+
+            return response;
         } catch (DisabledException e) {
             throw new DisabledUserException();
         } catch (BadCredentialsException e) {
             throw new InvalidCredentialsException();
         }
-
-        // TODO remove sout
-        System.out.println("-------- >> authentification: " + authentication.getPrincipal());
-
-        User user = (User) authentication.getPrincipal();
-
-        Set<String> roles = user.getAuthorities().stream().map(r -> r.getAuthority()).collect(Collectors.toSet());
-
-        // Generate token
-        String token = jwtUtil.generateToken(authentication);
-
-        // Create response DTO
-        UserResponseDto response = new UserResponseDto();
-        response.setToken(token);
-        response.setRoles(roles.stream().collect(Collectors.toList()));
-
-        return new ResponseEntity<UserResponseDto>(response, HttpStatus.OK);
     }
 
     @PostMapping("signup")
