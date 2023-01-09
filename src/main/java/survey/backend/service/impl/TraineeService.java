@@ -41,11 +41,11 @@ private ModelMapper modelMapper;
               .toList();
     }
     if (lastName != null && firstName == null) {
-      return StreamUtils.toStream(this.traineeRepository.findByLastName(lastName))
+      return StreamUtils.toStream(this.traineeRepository.findByLastNameIgnoreCase(lastName))
               .map(traineeEntity -> modelMapper.map(traineeEntity, TraineeDto.class))
               .toList();
     }
-    return StreamUtils.toStream(this.traineeRepository.findByFirstName(firstName))
+    return StreamUtils.toStream(this.traineeRepository.findByFirstNameIgnoreCase(firstName))
             .map(traineeEntity -> modelMapper.map(traineeEntity, TraineeDto.class))
             .toList();
   }

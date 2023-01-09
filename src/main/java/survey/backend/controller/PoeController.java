@@ -65,7 +65,6 @@ public class PoeController {
             .orElseThrow(() -> NoDataFoundError.withId("Poe", Math.toIntExact(poeDto.getId())));
   }
 
-  // TODO add method to add / remove trainee from poe
   @PatchMapping("{poeId}/add/{traineeId}")
 //@PreAuthorize("hasRole('ADMIN')")
   public Optional<PoeFullDto> addOneTrainee(@PathVariable("poeId") long poeId , @PathVariable("traineeId") long traineeId) {
