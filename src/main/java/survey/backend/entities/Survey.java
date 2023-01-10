@@ -1,11 +1,14 @@
 package survey.backend.entities;
 
+import lombok.Getter;
+import lombok.Setter;
 import survey.backend.enums.Level;
 import survey.backend.enums.PoeType;
 
 import javax.persistence.*;
 
 @Entity
+@Getter @Setter
 public class Survey {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
