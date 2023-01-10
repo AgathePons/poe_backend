@@ -8,7 +8,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 import survey.backend.entities.Poe;
-import survey.backend.tools.PoeType;
+import survey.backend.enums.PoeType;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

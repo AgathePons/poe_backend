@@ -3,11 +3,9 @@ package survey.backend.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
-import survey.backend.entities.Trainee;
-import survey.backend.tools.PoeType;
+import survey.backend.enums.PoeType;
 
 import java.util.Date;
-import java.util.Set;
 
 @Builder
 @AllArgsConstructor

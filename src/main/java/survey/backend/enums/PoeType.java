@@ -1,4 +1,4 @@
-package survey.backend.tools;
+package survey.backend.enums;
 
 public enum PoeType {
   POEC, POEI
