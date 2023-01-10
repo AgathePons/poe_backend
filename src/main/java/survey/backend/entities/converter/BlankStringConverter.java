@@ -1,4 +1,4 @@
-package survey.backend.entities.conerter;
+package survey.backend.entities.converter;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;

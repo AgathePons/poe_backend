@@ -1,7 +1,7 @@
 package survey.backend.entities;
 
 import lombok.*;
-import survey.backend.tools.PoeType;
+import survey.backend.enums.PoeType;
 
 import javax.persistence.*;
 import java.util.Date;

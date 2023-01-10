@@ -2,7 +2,6 @@ package survey.backend.entities;
 
 import lombok.Getter;
 import lombok.Setter;
-import survey.backend.entities.conerter.BlankStringConverter;
 
 import javax.persistence.*;
 import java.util.Date;
