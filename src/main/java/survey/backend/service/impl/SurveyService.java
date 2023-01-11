@@ -3,7 +3,6 @@ package survey.backend.service.impl;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import survey.backend.components.StreamUtils;
-import survey.backend.dto.PoeDto;
 import survey.backend.dto.SurveyDto;
 import survey.backend.dto.SurveyFullDto;
 import survey.backend.entities.Survey;
@@ -18,8 +17,9 @@ public class SurveyService implements survey.backend.service.SurveyService{
     @Autowired
     private SurveyRepository surveyRepository ;
 
+    @Autowired
     private QuestionRepository questionRepository ;
-
+    @Autowired
     private ModelMapper modelMapper ;
 
     @Override
@@ -57,6 +57,11 @@ public class SurveyService implements survey.backend.service.SurveyService{
 
     @Override
     public boolean delete(long id) {
-        return false;
+        return surveyRepository.findById(id)
+                .map(surveyEntity -> {
+                    surveyRepository.delete(surveyEntity);
+                    return true;
+                })
+                .orElse(false);
     }
 }
