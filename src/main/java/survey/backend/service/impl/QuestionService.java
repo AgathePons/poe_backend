@@ -4,12 +4,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import survey.backend.components.StreamUtils;
 import survey.backend.dto.QuestionDto;
-import survey.backend.dto.TraineeDto;
 import survey.backend.entities.Question;
-import survey.backend.entities.Trainee;
 import survey.backend.repository.QuestionRepository;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
