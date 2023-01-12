@@ -47,7 +47,7 @@ public class SurveyController {
         }
     }
 
-    @PutMapping
+    @PutMapping("{id}")
     //@PreAuthorize("hasRole('ADMIN')")
     public SurveyDto update(@RequestBody SurveyDto surveyDto) {
         return surveyService.update(surveyDto)
