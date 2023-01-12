@@ -2,6 +2,7 @@ package survey.backend.service.impl;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import survey.backend.components.StreamUtils;
 import survey.backend.dto.SurveyDto;
 import survey.backend.dto.SurveyFullDto;
@@ -12,6 +13,7 @@ import survey.backend.repository.SurveyRepository;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class SurveyService implements survey.backend.service.SurveyService{
 
     @Autowired
