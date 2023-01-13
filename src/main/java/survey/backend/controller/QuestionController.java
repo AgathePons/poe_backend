@@ -9,6 +9,7 @@ import survey.backend.error.NoDataFoundError;
 import survey.backend.service.AnswerService;
 import survey.backend.service.QuestionService;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -73,6 +74,18 @@ public class QuestionController {
             // if poe not found
             throw NoDataFoundError.withId(ITEM_TYPE, questionId);
         }
+    }
+
+    @PatchMapping("/{questionId}/addAnswers")
+    public QuestionFullDto addAnswers(
+            @PathVariable("questionId") long questionId,
+            @RequestBody List<Long> answerIds
+    ){
+        return questionService.addAnswers(questionId, answerIds)
+                .orElseThrow(() -> {
+                    throw NoDataFoundError.withIds("Question or answers",
+                            questionId);
+                });
     }
 }
 

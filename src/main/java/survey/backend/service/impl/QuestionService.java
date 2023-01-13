@@ -7,11 +7,13 @@ import survey.backend.components.StreamUtils;
 import survey.backend.dto.PoeFullDto;
 import survey.backend.dto.QuestionDto;
 import survey.backend.dto.QuestionFullDto;
+import survey.backend.dto.SurveyFullDto;
 import survey.backend.entities.Answer;
 import survey.backend.entities.Question;
 import survey.backend.repository.AnswerRepository;
 import survey.backend.repository.QuestionRepository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -86,5 +88,23 @@ public class QuestionService implements survey.backend.service.QuestionService {
                             return modelMapper.map(questionEntity, QuestionFullDto.class);
                         })
                 );
+    }
+
+    @Override
+    public Optional<QuestionFullDto> addAnswers(long questionId, Collection<Long> answerIds) {
+        return questionRepository.findById(questionId)
+                .flatMap(questionEntity -> {
+                    var answerEntities = StreamUtils.toStream(answerRepository.findAllById(answerIds)).toList();
+                    if (answerIds.size() != answerEntities.size()) {
+                        // if at least one trainee not found
+                        return Optional.empty();
+                    }
+                    // add trainees
+                    questionEntity.getAnswers().addAll(answerEntities);
+                    // save
+                    questionRepository.save(questionEntity);
+                    // return
+                    return Optional.of(modelMapper.map(questionEntity, QuestionFullDto.class));
+                });
     }
 }

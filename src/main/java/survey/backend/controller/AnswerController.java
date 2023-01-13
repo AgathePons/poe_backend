@@ -5,9 +5,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import survey.backend.dto.AnswerDto;
 import survey.backend.dto.QuestionDto;
+import survey.backend.dto.SurveyFullDto;
 import survey.backend.error.NoDataFoundError;
 import survey.backend.service.AnswerService;
 import survey.backend.service.QuestionService;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/answer")
@@ -54,4 +57,5 @@ public class AnswerController {
         return answerService.update(answerDto)
                 .orElseThrow(() -> NoDataFoundError.withId("Survey", Math.toIntExact(answerDto.getId())));
     }
+
 }
