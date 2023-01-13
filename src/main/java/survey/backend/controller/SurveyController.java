@@ -88,4 +88,24 @@ public class SurveyController {
                             surveyId);
                 });
     }
+
+    @PatchMapping("{surveyId}/remove/{questionId}")
+//@PreAuthorize("hasRole('ADMIN')")
+    public Optional<SurveyFullDto> removeOneQuestion(@PathVariable("surveyId") long surveyId , @PathVariable("questionId") long questionId) {
+        // check if poe and trainee exist
+        Optional<SurveyFullDto> optSurvey = surveyService.findById(surveyId);
+        Optional<QuestionDto> optQuestion = questionService.findById(questionId);
+        if (optSurvey.isPresent()) {
+            if (optQuestion.isPresent()) {
+
+                // update the poe
+                return surveyService.removeQuestion(surveyId, questionId);
+            }
+            // if trainee not found
+            throw NoDataFoundError.withId("Question", questionId);
+        } else {
+            // if poe not found
+            throw NoDataFoundError.withId(ITEM_TYPE, surveyId);
+        }
+    }
 }

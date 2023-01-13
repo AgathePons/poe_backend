@@ -98,4 +98,16 @@ public class SurveyService implements survey.backend.service.SurveyService{
                     return Optional.of(modelMapper.map(surveyEntity, SurveyFullDto.class));
                 });
     }
+
+    @Override
+    public Optional<SurveyFullDto> removeQuestion(long surveyId, long questionId) {
+        return surveyRepository.findById(surveyId)
+                .flatMap(surveyEntity -> questionRepository.findById(questionId)
+                        .map(questionEntity -> {
+                            surveyEntity.getQuestions().remove(questionEntity);
+                            surveyRepository.save(surveyEntity);
+                            return modelMapper.map(surveyEntity, SurveyFullDto.class);
+                        })
+                );
+    }
 }
