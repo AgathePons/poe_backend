@@ -4,12 +4,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import survey.backend.components.StreamUtils;
+import survey.backend.dto.PoeFullDto;
 import survey.backend.dto.SurveyDto;
 import survey.backend.dto.SurveyFullDto;
 import survey.backend.entities.Survey;
 import survey.backend.repository.QuestionRepository;
 import survey.backend.repository.SurveyRepository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,5 +67,35 @@ public class SurveyService implements survey.backend.service.SurveyService{
                     return true;
                 })
                 .orElse(false);
+    }
+
+    @Override
+    public Optional<SurveyFullDto> addQuestion(long surveyId, long questionId) {
+        return surveyRepository.findById(surveyId)
+                .flatMap(surveyEntity -> questionRepository.findById(questionId)
+                        .map(questionEntity -> {
+                            surveyEntity.getQuestions().add(questionEntity);
+                            surveyRepository.save(surveyEntity);
+                            return modelMapper.map(surveyEntity, SurveyFullDto.class);
+                        })
+                );
+    }
+
+    @Override
+    public Optional<SurveyFullDto> addQuestions(long surveyId, Collection<Long> questionIds) {
+        return surveyRepository.findById(surveyId)
+                .flatMap(surveyEntity -> {
+                    var questionEntities = StreamUtils.toStream(questionRepository.findAllById(questionIds)).toList();
+                    if (questionIds.size() != questionEntities.size()) {
+                        // if at least one trainee not found
+                        return Optional.empty();
+                    }
+                    // add trainees
+                    surveyEntity.getQuestions().addAll(questionEntities);
+                    // save
+                    surveyRepository.save(surveyEntity);
+                    // return
+                    return Optional.of(modelMapper.map(surveyEntity, SurveyFullDto.class));
+                });
     }
 }

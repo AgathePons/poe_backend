@@ -1,5 +1,6 @@
 package survey.backend.service;
 
+import survey.backend.dto.PoeFullDto;
 import survey.backend.dto.SurveyDto;
 import survey.backend.dto.SurveyFullDto;
 
@@ -41,4 +42,10 @@ public interface SurveyService {
      * @return true if found and deleted, false if not found
      */
     boolean delete(long id);
+
+    Optional<SurveyFullDto> addQuestion(long surveyId, long questionId);
+
+    Optional<SurveyFullDto> addQuestions(long surveyId, Collection<Long> questionIds);
+
+
 }

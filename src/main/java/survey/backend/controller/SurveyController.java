@@ -3,11 +3,12 @@ package survey.backend.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import survey.backend.dto.SurveyDto;
-import survey.backend.dto.SurveyFullDto;
+import survey.backend.dto.*;
 import survey.backend.error.NoDataFoundError;
 import survey.backend.service.QuestionService;
 import survey.backend.service.SurveyService;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/survey")
@@ -52,5 +53,26 @@ public class SurveyController {
     public SurveyDto update(@RequestBody SurveyDto surveyDto) {
         return surveyService.update(surveyDto)
                 .orElseThrow(() -> NoDataFoundError.withId("Survey", Math.toIntExact(surveyDto.getId())));
+    }
+
+    @PatchMapping("{surveyId}/add/{questionId}")
+//@PreAuthorize("hasRole('ADMIN')")
+    public Optional<SurveyFullDto> addOneQuestion(@PathVariable("surveyId") long surveyId , @PathVariable("questionId") long questionId) {
+        // check if poe and trainee exist
+        Optional<SurveyFullDto> optSurvey = surveyService.findById(surveyId);
+        Optional<QuestionDto> optQuestion = questionService.findById(questionId);
+        if (optSurvey.isPresent()) {
+            if (optQuestion.isPresent()) {
+                System.out.println("===>>> Survey: " + optSurvey.get().getTitle());
+                System.out.println("===>>> question: " + optQuestion.get().getText() + ' ' + optQuestion.get().getAnswerType());
+                // update the poe
+                return surveyService.addQuestion(surveyId, questionId);
+            }
+            // if trainee not found
+            throw NoDataFoundError.withId("Question", questionId);
+        } else {
+            // if poe not found
+            throw NoDataFoundError.withId(ITEM_TYPE, surveyId);
+        }
     }
 }
