@@ -1,6 +1,7 @@
 package survey.backend.service;
 
 import survey.backend.dto.QuestionDto;
+import survey.backend.dto.QuestionFullDto;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -17,6 +18,7 @@ public interface QuestionService {
      * @param id
      * @return optional of question
      */
+    Optional<QuestionFullDto> findByIdFullDto(long id);
     Optional<QuestionDto> findById(long id);
 
     /**
@@ -39,4 +41,6 @@ public interface QuestionService {
      * @return true if found and deleted, false if not found
      */
     boolean delete(long id);
+
+    Optional<QuestionFullDto> addAnswer(long questionId, long answerId);
 }

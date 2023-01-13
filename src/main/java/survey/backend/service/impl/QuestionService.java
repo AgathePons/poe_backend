@@ -4,8 +4,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import survey.backend.components.StreamUtils;
+import survey.backend.dto.PoeFullDto;
 import survey.backend.dto.QuestionDto;
+import survey.backend.dto.QuestionFullDto;
+import survey.backend.entities.Answer;
 import survey.backend.entities.Question;
+import survey.backend.repository.AnswerRepository;
 import survey.backend.repository.QuestionRepository;
 
 import java.util.List;
@@ -18,12 +22,20 @@ public class QuestionService implements survey.backend.service.QuestionService {
 
     @Autowired
     private ModelMapper modelMapper ;
+    @Autowired
+    private AnswerRepository answerRepository;
 
     @Override
     public List<QuestionDto> findAll() {
         return StreamUtils.toStream(this.questionRepository.findAll())
                 .map(questionEntity -> modelMapper.map(questionEntity, QuestionDto.class))
                 .toList();
+    }
+
+    @Override
+    public Optional<QuestionFullDto> findByIdFullDto(long id) {
+        return this.questionRepository.findById(id)
+                .map(questionEntity -> modelMapper.map(questionEntity, QuestionFullDto.class));
     }
 
     @Override
@@ -60,5 +72,24 @@ public class QuestionService implements survey.backend.service.QuestionService {
                     return true;
                 })
                 .orElse(false);
+    }
+
+    @Override
+    public Optional<QuestionFullDto> addAnswer(long questionId, long answerId) {
+
+//      Question question = questionRepository.findById(questionId).get();
+//      Answer answer = answerRepository.findById(answerId).get();
+//      answer.getQuestions().add(question);
+//      answerRepository.save(answer);
+
+        return questionRepository.findById(questionId)
+                .flatMap(questionEntity -> answerRepository.findById(answerId)
+                        .map(answerEntity -> {
+                            // questionEntity.getAnswer().add(answerEntity);
+                            questionEntity.setAnswer(answerEntity);
+                            questionRepository.save(questionEntity);
+                            return modelMapper.map(questionEntity, QuestionFullDto.class);
+                        })
+                );
     }
 }

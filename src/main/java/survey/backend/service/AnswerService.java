@@ -39,4 +39,6 @@ public interface AnswerService {
      * @return true if found and deleted, false if not found
      */
     boolean delete(long id);
+
+    Optional<AnswerDto> addQuestion(long questionId, long answerId);
 }

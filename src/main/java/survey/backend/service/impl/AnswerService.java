@@ -5,8 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import survey.backend.components.StreamUtils;
 import survey.backend.dto.AnswerDto;
+import survey.backend.dto.QuestionFullDto;
 import survey.backend.entities.Answer;
+import survey.backend.entities.Question;
 import survey.backend.repository.AnswerRepository;
+import survey.backend.repository.QuestionRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +21,9 @@ public class AnswerService implements survey.backend.service.AnswerService {
 
     @Autowired
     private ModelMapper modelMapper ;
+
+    @Autowired
+    private QuestionRepository questionRepository;
 
     @Override
     public List<AnswerDto> findAll() {
@@ -60,5 +66,19 @@ public class AnswerService implements survey.backend.service.AnswerService {
                     return true;
                 })
                 .orElse(false);
+    }
+
+    @Override
+    public Optional<AnswerDto> addQuestion(long questionId, long answerId) {
+
+        return answerRepository.findById(answerId)
+                .flatMap(answerEntity -> questionRepository.findById(questionId)
+                        .map(questionEntity -> {
+                            answerEntity.getQuestions().add(questionEntity);
+
+                            answerRepository.save(answerEntity);
+                            return modelMapper.map(answerEntity, AnswerDto.class);
+                        })
+                );
     }
 }
