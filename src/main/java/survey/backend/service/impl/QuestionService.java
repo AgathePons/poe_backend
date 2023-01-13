@@ -77,16 +77,11 @@ public class QuestionService implements survey.backend.service.QuestionService {
     @Override
     public Optional<QuestionFullDto> addAnswer(long questionId, long answerId) {
 
-//      Question question = questionRepository.findById(questionId).get();
-//      Answer answer = answerRepository.findById(answerId).get();
-//      answer.getQuestions().add(question);
-//      answerRepository.save(answer);
 
         return questionRepository.findById(questionId)
                 .flatMap(questionEntity -> answerRepository.findById(answerId)
                         .map(answerEntity -> {
-                            // questionEntity.getAnswer().add(answerEntity);
-                            questionEntity.setAnswer(answerEntity);
+                             questionEntity.getAnswers().add(answerEntity);
                             questionRepository.save(questionEntity);
                             return modelMapper.map(questionEntity, QuestionFullDto.class);
                         })

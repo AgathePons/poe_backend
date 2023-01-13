@@ -17,6 +17,4 @@ public class Answer {
     @Column(nullable = false)
     private String text;
 
-    @OneToMany(mappedBy = "answer")
-   private List<Question> questions;
 }

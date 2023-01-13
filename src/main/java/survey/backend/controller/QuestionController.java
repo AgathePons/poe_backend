@@ -64,7 +64,6 @@ public class QuestionController {
         Optional<AnswerDto> optAnswer = answerService.findById(answerId);
         if (optQuestion.isPresent()) {
             if (optAnswer.isPresent()) {
-answerService.addQuestion(questionId, answerId);
                 // update the poe
                 return questionService.addAnswer(questionId, answerId);
             }

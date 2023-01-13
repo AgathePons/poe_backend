@@ -23,8 +23,8 @@ public class Question {
     @Column(nullable = false, length = 11)
     private AnswerType answerType;
 
-    @ManyToOne // mode fetch LAZY by default
-    @JoinColumn(name="answer_id")
+    @OneToMany // mode fetch LAZY by default
+    @JoinColumn(name="question_id")
     @Builder.Default
-    private Answer answer;
+    private Set<Answer> answers = new HashSet<>();
 }

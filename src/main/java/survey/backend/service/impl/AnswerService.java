@@ -68,17 +68,4 @@ public class AnswerService implements survey.backend.service.AnswerService {
                 .orElse(false);
     }
 
-    @Override
-    public Optional<AnswerDto> addQuestion(long questionId, long answerId) {
-
-        return answerRepository.findById(answerId)
-                .flatMap(answerEntity -> questionRepository.findById(questionId)
-                        .map(questionEntity -> {
-                            answerEntity.getQuestions().add(questionEntity);
-
-                            answerRepository.save(answerEntity);
-                            return modelMapper.map(answerEntity, AnswerDto.class);
-                        })
-                );
-    }
 }

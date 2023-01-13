@@ -40,5 +40,4 @@ public interface AnswerService {
      */
     boolean delete(long id);
 
-    Optional<AnswerDto> addQuestion(long questionId, long answerId);
 }
