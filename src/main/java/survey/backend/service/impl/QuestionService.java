@@ -3,6 +3,7 @@ package survey.backend.service.impl;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import survey.backend.components.StreamUtils;
 import survey.backend.dto.PoeFullDto;
 import survey.backend.dto.QuestionDto;
@@ -96,15 +97,27 @@ public class QuestionService implements survey.backend.service.QuestionService {
                 .flatMap(questionEntity -> {
                     var answerEntities = StreamUtils.toStream(answerRepository.findAllById(answerIds)).toList();
                     if (answerIds.size() != answerEntities.size()) {
-                        // if at least one trainee not found
+
                         return Optional.empty();
                     }
-                    // add trainees
+
                     questionEntity.getAnswers().addAll(answerEntities);
-                    // save
+
                     questionRepository.save(questionEntity);
-                    // return
+
                     return Optional.of(modelMapper.map(questionEntity, QuestionFullDto.class));
                 });
+    }
+
+    @Override
+    public Optional<QuestionFullDto> removeAnswer(long questionId, long answerId) {
+        return questionRepository.findById(questionId)
+                .flatMap(questionEntity -> answerRepository.findById(answerId)
+                        .map(answerEntity -> {
+                            questionEntity.getAnswers().remove(answerEntity);
+                            questionRepository.save(questionEntity);
+                            return modelMapper.map(questionEntity, QuestionFullDto.class);
+                        })
+                );
     }
 }

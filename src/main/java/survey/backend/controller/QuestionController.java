@@ -87,6 +87,25 @@ public class QuestionController {
                             questionId);
                 });
     }
+
+    @PatchMapping("{questionId}/remove/{answerId}")
+//@PreAuthorize("hasRole('ADMIN')")
+    public Optional<QuestionFullDto> removeOneAnswer(@PathVariable("questionId") long questionId , @PathVariable("answerId") long answerId) {
+
+        Optional<QuestionFullDto> optQuestion = questionService.findByIdFullDto(questionId);
+        Optional<AnswerDto> optAnswer = answerService.findById(answerId);
+        if (optQuestion.isPresent()) {
+            if (optAnswer.isPresent()) {
+
+                return questionService.removeAnswer(questionId, answerId);
+            }
+            // if trainee not found
+            throw NoDataFoundError.withId("Answer", answerId);
+        } else {
+            // if poe not found
+            throw NoDataFoundError.withId(ITEM_TYPE, questionId);
+        }
+    }
 }
 
 

@@ -45,4 +45,8 @@ public interface QuestionService {
     Optional<QuestionFullDto> addAnswer(long questionId, long answerId);
 
     Optional<QuestionFullDto> addAnswers(long questionId, Collection<Long> answerId);
+
+    Optional<QuestionFullDto> removeAnswer(long questionId, long answerId);
+
+
 }
