@@ -11,7 +11,7 @@ public interface QuestionService {
      * find all questions
      * @return collection of questions
      */
-    Collection<QuestionDto> findAll();
+    Collection<QuestionFullDto> findAll();
 
     /**
      * find one question by id

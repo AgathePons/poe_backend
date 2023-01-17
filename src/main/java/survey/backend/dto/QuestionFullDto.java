@@ -15,6 +15,6 @@ import java.util.Set;
 @ToString(callSuper = true)
 public class QuestionFullDto extends QuestionDto {
 
-    private Set<Answer> answers;
+    private Set<Answer> answers = new HashSet<>();
     private Long order;
 }
