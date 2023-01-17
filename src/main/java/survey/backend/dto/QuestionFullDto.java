@@ -15,5 +15,5 @@ import java.util.Set;
 @ToString(callSuper = true)
 public class QuestionFullDto extends QuestionDto {
 
-    private Answer answers;
+    private Set<Answer> answers = new HashSet<>();
 }

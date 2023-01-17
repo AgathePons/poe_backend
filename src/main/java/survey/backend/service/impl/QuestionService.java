@@ -29,9 +29,9 @@ public class QuestionService implements survey.backend.service.QuestionService {
     private AnswerRepository answerRepository;
 
     @Override
-    public List<QuestionDto> findAll() {
+    public List<QuestionFullDto> findAll() {
         return StreamUtils.toStream(this.questionRepository.findAll())
-                .map(questionEntity -> modelMapper.map(questionEntity, QuestionDto.class))
+                .map(questionEntity -> modelMapper.map(questionEntity, QuestionFullDto.class))
                 .toList();
     }
 

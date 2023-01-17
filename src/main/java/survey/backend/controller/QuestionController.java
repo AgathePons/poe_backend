@@ -24,13 +24,13 @@ public class QuestionController {
     private QuestionService questionService;
 
     @GetMapping
-    public Iterable<QuestionDto> getAll() {
+    public Iterable<QuestionFullDto> getAll() {
         return this.questionService.findAll();
     }
 
     @GetMapping("{id}")
-    public QuestionDto getById(@PathVariable("id") long id) {
-        return questionService.findById(id)
+    public QuestionFullDto getById(@PathVariable("id") long id) {
+        return questionService.findByIdFullDto(id)
                 .orElseThrow(() -> NoDataFoundError.withId(ITEM_TYPE, id));
     }
 
