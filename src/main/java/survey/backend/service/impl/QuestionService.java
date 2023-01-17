@@ -42,9 +42,9 @@ public class QuestionService implements survey.backend.service.QuestionService {
     }
 
     @Override
-    public Optional<QuestionDto> findById(long id) {
+    public Optional<QuestionFullDto> findById(long id) {
         return this.questionRepository.findById(id)
-                .map(questionEntity -> modelMapper.map(questionEntity, QuestionDto.class));
+                .map(questionEntity -> modelMapper.map(questionEntity, QuestionFullDto.class));
     }
 
     @Override

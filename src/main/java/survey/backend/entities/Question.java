@@ -19,6 +19,9 @@ public class Question {
     @Column(nullable = false)
     private String text;
 
+    @Column(nullable = true)
+    private Long orderInSurvey;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 11)
     private AnswerType answerType;
@@ -27,4 +30,6 @@ public class Question {
     @JoinColumn(name="question_id")
     @Builder.Default
     private Set<Answer> answers = new HashSet<>();
+
+
 }

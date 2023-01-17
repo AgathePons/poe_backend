@@ -61,7 +61,7 @@ public class SurveyController {
     public Optional<SurveyFullDto> addOneQuestion(@PathVariable("surveyId") long surveyId , @PathVariable("questionId") long questionId) {
         // check if poe and trainee exist
         Optional<SurveyFullDto> optSurvey = surveyService.findById(surveyId);
-        Optional<QuestionDto> optQuestion = questionService.findById(questionId);
+        Optional<QuestionFullDto> optQuestion = questionService.findById(questionId);
         if (optSurvey.isPresent()) {
             if (optQuestion.isPresent()) {
                 System.out.println("===>>> Survey: " + optSurvey.get().getTitle());
@@ -94,7 +94,7 @@ public class SurveyController {
     public Optional<SurveyFullDto> removeOneQuestion(@PathVariable("surveyId") long surveyId , @PathVariable("questionId") long questionId) {
         // check if poe and trainee exist
         Optional<SurveyFullDto> optSurvey = surveyService.findById(surveyId);
-        Optional<QuestionDto> optQuestion = questionService.findById(questionId);
+        Optional<QuestionFullDto> optQuestion = questionService.findById(questionId);
         if (optSurvey.isPresent()) {
             if (optQuestion.isPresent()) {
 

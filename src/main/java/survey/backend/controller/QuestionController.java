@@ -29,7 +29,7 @@ public class QuestionController {
     }
 
     @GetMapping("{id}")
-    public QuestionDto getById(@PathVariable("id") long id) {
+    public QuestionFullDto getById(@PathVariable("id") long id) {
         return questionService.findById(id)
                 .orElseThrow(() -> NoDataFoundError.withId(ITEM_TYPE, id));
     }

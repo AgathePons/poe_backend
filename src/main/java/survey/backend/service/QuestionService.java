@@ -19,7 +19,7 @@ public interface QuestionService {
      * @return optional of question
      */
     Optional<QuestionFullDto> findByIdFullDto(long id);
-    Optional<QuestionDto> findById(long id);
+    Optional<QuestionFullDto> findById(long id);
 
     /**
      * add new question
