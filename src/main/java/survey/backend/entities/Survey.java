@@ -1,5 +1,6 @@
 package survey.backend.entities;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import survey.backend.enums.Level;
@@ -27,12 +28,10 @@ public class Survey {
     @Enumerated(EnumType.STRING)
     private PoeType poeType;
 
-    @ManyToMany
-    @JoinTable(
-            name = "survey_contains_question",
-            joinColumns = @JoinColumn(name = "survey_id"),
-            inverseJoinColumns = @JoinColumn(name = "question_id")
-    )
-    //@Transient // to cancel persistance, while dev
+    @OneToMany // mode fetch LAZY by default
+    @JoinColumn(name="survey_id")
+    @Builder.Default
     private Set<Question> questions = new HashSet<>();
+
+
 }

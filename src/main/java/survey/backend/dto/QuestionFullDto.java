@@ -16,4 +16,5 @@ import java.util.Set;
 public class QuestionFullDto extends QuestionDto {
 
     private Set<Answer> answers = new HashSet<>();
+    private Long order;
 }
