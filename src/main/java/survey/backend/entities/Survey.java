@@ -30,6 +30,7 @@ public class Survey {
 
     @OneToMany // mode fetch LAZY by default
     @JoinColumn(name="survey_id")
+    @OrderBy("orderInSurvey ASC")
     @Builder.Default
     private Set<Question> questions = new HashSet<>();
 

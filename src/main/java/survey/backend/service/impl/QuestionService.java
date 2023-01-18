@@ -30,7 +30,7 @@ public class QuestionService implements survey.backend.service.QuestionService {
 
     @Override
     public List<QuestionFullDto> findAll() {
-        return StreamUtils.toStream(this.questionRepository.findAll())
+        return StreamUtils.toStream(this.questionRepository.findAllByOrder())
                 .map(questionEntity -> modelMapper.map(questionEntity, QuestionFullDto.class))
                 .toList();
     }
