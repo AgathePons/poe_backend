@@ -12,4 +12,5 @@ public class QuestionDto {
     private Long id;
     private String text;
     private AnswerType answerType;
+    private Long orderInSurvey;
 }

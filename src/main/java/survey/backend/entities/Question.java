@@ -19,8 +19,8 @@ public class Question {
     @Column(nullable = false)
     private String text;
 
-    @Column(nullable = true)
-    private Long orderInSurvey;
+    @Column(nullable = false)
+    private Long orderInSurvey = 999L;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 11)
