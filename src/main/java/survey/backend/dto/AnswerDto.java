@@ -10,4 +10,5 @@ import lombok.*;
 public class AnswerDto {
     private Long id;
     private String text;
+    private Long orderInQuestion;
 }
