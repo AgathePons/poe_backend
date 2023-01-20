@@ -28,6 +28,7 @@ public class Question {
 
     @OneToMany // mode fetch LAZY by default
     @JoinColumn(name="question_id")
+    @OrderBy("orderInQuestion ASC")
     @Builder.Default
     private Set<Answer> answers = new HashSet<>();
 
