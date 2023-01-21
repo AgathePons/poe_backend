@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import survey.backend.components.StreamUtils;
 import survey.backend.dto.PoeDto;
 import survey.backend.dto.PoeFullDto;
+import survey.backend.dto.PoeSurveyDto;
 import survey.backend.dto.TraineeDto;
 import survey.backend.entities.Poe;
 import survey.backend.repository.PoeRepository;
@@ -31,6 +32,13 @@ public class PoeService implements survey.backend.service.PoeService {
   public List<PoeDto> findAll() {
     return StreamUtils.toStream(this.poeRepository.findAll())
             .map(poeEntity -> modelMapper.map(poeEntity, PoeDto.class))
+            .toList();
+  }
+
+  @Override
+  public List<PoeSurveyDto> findAllWithSurvey() {
+    return StreamUtils.toStream(this.poeRepository.findAll())
+            .map(poeEntity -> modelMapper.map(poeEntity, PoeSurveyDto.class))
             .toList();
   }
 

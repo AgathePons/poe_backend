@@ -2,8 +2,10 @@ package survey.backend.service;
 
 import survey.backend.dto.PoeDto;
 import survey.backend.dto.PoeFullDto;
+import survey.backend.dto.PoeSurveyDto;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 public interface PoeService {
@@ -12,7 +14,7 @@ public interface PoeService {
    * @return collection of poes
    */
   Collection<PoeDto> findAll();// TODO replace for a DTO without trainees with smart use of inheritance
-
+  List<PoeSurveyDto> findAllWithSurvey();
   /**
    * find one poe by id
    * @param id

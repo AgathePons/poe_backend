@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import survey.backend.dto.PoeDto;
 import survey.backend.dto.PoeFullDto;
+import survey.backend.dto.PoeSurveyDto;
 import survey.backend.dto.TraineeDto;
 import survey.backend.error.NoDataFoundError;
 import survey.backend.service.impl.PoeService;
@@ -29,6 +30,12 @@ public class PoeController {
   //@PreAuthorize("hasRole('ADMIN')")
   public Iterable<PoeDto> getAll() {
     return this.poeService.findAll();
+  }
+
+  @GetMapping("withSurvey")
+  //@PreAuthorize("hasRole('ADMIN')")
+  public Iterable<PoeSurveyDto> getAllWithSurvey() {
+    return this.poeService.findAllWithSurvey();
   }
 
   @GetMapping("{id}")
