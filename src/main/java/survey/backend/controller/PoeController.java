@@ -3,10 +3,7 @@ package survey.backend.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import survey.backend.dto.PoeDto;
-import survey.backend.dto.PoeFullDto;
-import survey.backend.dto.PoeSurveyDto;
-import survey.backend.dto.TraineeDto;
+import survey.backend.dto.*;
 import survey.backend.error.NoDataFoundError;
 import survey.backend.service.impl.PoeService;
 import survey.backend.service.impl.TraineeService;
@@ -66,6 +63,15 @@ public class PoeController {
   public PoeDto update(@RequestBody PoeDto poeDto) {
     return poeService.update(poeDto)
             .orElseThrow(() -> NoDataFoundError.withId("Poe", Math.toIntExact(poeDto.getId())));
+  }
+
+
+
+  @PatchMapping
+  //@PreAuthorize("hasRole('ADMIN')")
+  public PoeStatusDto updateStatus(@RequestBody PoeStatusDto poeStatusDto) {
+    return poeService.updateStatus(poeStatusDto)
+            .orElseThrow(() -> NoDataFoundError.withId("Poe", Math.toIntExact(poeStatusDto.getId())));
   }
 
   @PatchMapping("{poeId}/add/{traineeId}")

@@ -2,6 +2,7 @@ package survey.backend.service;
 
 import survey.backend.dto.PoeDto;
 import survey.backend.dto.PoeFullDto;
+import survey.backend.dto.PoeStatusDto;
 import survey.backend.dto.PoeSurveyDto;
 
 import java.util.Collection;
@@ -36,6 +37,7 @@ public interface PoeService {
    */
   Optional<PoeDto> update(PoeDto poeDto);
 
+  Optional<PoeStatusDto> updateStatus(PoeStatusDto poeSurveyDto);
   /**
    * update one poe add one trainee
    * @param poeId
