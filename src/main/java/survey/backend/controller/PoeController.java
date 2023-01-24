@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import survey.backend.dto.*;
 import survey.backend.error.NoDataFoundError;
+import survey.backend.service.impl.EmailSenderService;
 import survey.backend.service.impl.PoeService;
 import survey.backend.service.impl.TraineeService;
 
@@ -19,6 +20,9 @@ public class PoeController {
 
   @Autowired
   private PoeService poeService;
+
+  @Autowired
+  private EmailSenderService emailSenderService;
 
   @Autowired
   private TraineeService traineeService;
@@ -127,6 +131,16 @@ public class PoeController {
                       poeId);
             });
   }
+
+
+  @GetMapping("{id}/sendMail")
+  //@PreAuthorize("hasRole('ADMIN')")
+  public void sendById(@PathVariable("id") long id) {
+
+    emailSenderService.sendEmail("agui.jeremy@gmail.com","C'est le sujet", "C'est le body");
+
+  }
+
 }
 
 
