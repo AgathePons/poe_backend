@@ -3,10 +3,9 @@ package survey.backend.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import survey.backend.dto.PoeDto;
-import survey.backend.dto.PoeFullDto;
-import survey.backend.dto.TraineeDto;
+import survey.backend.dto.*;
 import survey.backend.error.NoDataFoundError;
+import survey.backend.service.impl.EmailSenderService;
 import survey.backend.service.impl.PoeService;
 import survey.backend.service.impl.TraineeService;
 
@@ -23,12 +22,21 @@ public class PoeController {
   private PoeService poeService;
 
   @Autowired
+  private EmailSenderService emailSenderService;
+
+  @Autowired
   private TraineeService traineeService;
 
   @GetMapping
   //@PreAuthorize("hasRole('ADMIN')")
   public Iterable<PoeDto> getAll() {
     return this.poeService.findAll();
+  }
+
+  @GetMapping("withSurvey")
+  //@PreAuthorize("hasRole('ADMIN')")
+  public Iterable<PoeSurveyDto> getAllWithSurvey() {
+    return this.poeService.findAllWithSurvey();
   }
 
   @GetMapping("{id}")
@@ -59,6 +67,15 @@ public class PoeController {
   public PoeDto update(@RequestBody PoeDto poeDto) {
     return poeService.update(poeDto)
             .orElseThrow(() -> NoDataFoundError.withId("Poe", Math.toIntExact(poeDto.getId())));
+  }
+
+
+
+  @PatchMapping
+  //@PreAuthorize("hasRole('ADMIN')")
+  public PoeStatusDto updateStatus(@RequestBody PoeStatusDto poeStatusDto) {
+    return poeService.updateStatus(poeStatusDto)
+            .orElseThrow(() -> NoDataFoundError.withId("Poe", Math.toIntExact(poeStatusDto.getId())));
   }
 
   @PatchMapping("{poeId}/add/{traineeId}")
@@ -114,6 +131,29 @@ public class PoeController {
                       poeId);
             });
   }
+
+
+  @PutMapping("{id}/sendMail")
+  //@PreAuthorize("hasRole('ADMIN')")
+  public void sendById(@PathVariable("id") long id,
+                       @RequestBody EmailDto emailDto) {
+
+    Optional<PoeFullDto> poeTargeted = this.poeService.findById(id);
+
+    if (poeTargeted.isPresent()) {
+      poeTargeted.get().getTrainees().forEach(trainee -> {
+        emailSenderService.sendEmail(trainee.getEmail(), emailDto.getSubject(), emailDto.getBody());
+
+
+      });
+    } else {
+      System.out.println("Aucune adresse mail");
+    }
+
+
+
+  }
+
 }
 
 
