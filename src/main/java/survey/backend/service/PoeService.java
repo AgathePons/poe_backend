@@ -23,6 +23,7 @@ public interface PoeService {
    */
   Optional<PoeFullDto> findById(long id);
 
+  Optional<PoeSurveyDto> findByIdWithStatus(long id);
   /**
    * add one new poe
    * @param poeDto

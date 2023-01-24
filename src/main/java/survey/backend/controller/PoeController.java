@@ -46,6 +46,14 @@ public class PoeController {
             .orElseThrow(() -> NoDataFoundError.withId(ITEM_TYPE, id));
   }
 
+
+  @GetMapping("{id}/WithStatus")
+  //@PreAuthorize("hasRole('ADMIN')")
+  public PoeSurveyDto getByIdWithStatus(@PathVariable("id") long id) {
+    return poeService.findByIdWithStatus(id)
+            .orElseThrow(() -> NoDataFoundError.withId(ITEM_TYPE, id));
+  }
+
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   //@PreAuthorize("hasRole('ADMIN')")

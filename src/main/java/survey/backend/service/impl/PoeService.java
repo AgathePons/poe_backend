@@ -44,6 +44,11 @@ public class PoeService implements survey.backend.service.PoeService {
         return this.poeRepository.findById(id)
                 .map(poeEntity -> modelMapper.map(poeEntity, PoeFullDto.class));
     }
+    @Override
+    public Optional<PoeSurveyDto> findByIdWithStatus(long id) {
+        return this.poeRepository.findById(id)
+                .map(poeEntity -> modelMapper.map(poeEntity, PoeSurveyDto.class));
+    }
 
     @Override
     public PoeDto add(PoeDto poeDto) {
