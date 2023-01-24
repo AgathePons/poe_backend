@@ -133,7 +133,7 @@ public class PoeController {
   }
 
 
-  @GetMapping("{id}/sendMail")
+  @PutMapping("{id}/sendMail")
   //@PreAuthorize("hasRole('ADMIN')")
   public void sendById(@PathVariable("id") long id,
                        @RequestBody EmailDto emailDto) {
