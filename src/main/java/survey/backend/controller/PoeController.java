@@ -138,7 +138,19 @@ public class PoeController {
   public void sendById(@PathVariable("id") long id,
                        @RequestBody EmailDto emailDto) {
 
-    emailSenderService.sendEmail("agui.jeremy@gmail.com", emailDto.getSubject(), emailDto.getBody());
+    Optional<PoeFullDto> poeTargeted = this.poeService.findById(id);
+
+    if (poeTargeted.isPresent()) {
+      poeTargeted.get().getTrainees().forEach(trainee -> {
+        emailSenderService.sendEmail(trainee.getEmail(), emailDto.getSubject(), emailDto.getBody());
+
+
+      });
+    } else {
+      System.out.println("Aucune adresse mail");
+    }
+
+
 
   }
 
