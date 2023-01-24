@@ -20,14 +20,15 @@ public class Question {
     private String text;
 
     @Column(nullable = false)
-    private Long orderInSurvey = 999L;
+    private Long orderInSurvey = 0L;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 11)
     private AnswerType answerType;
 
-    @OneToMany // mode fetch LAZY by default
+    @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true) // mode fetch LAZY by default
     @JoinColumn(name="question_id")
+    @OrderBy("orderInQuestion ASC")
     @Builder.Default
     private Set<Answer> answers = new HashSet<>();
 
