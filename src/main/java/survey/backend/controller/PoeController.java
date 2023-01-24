@@ -9,6 +9,7 @@ import survey.backend.service.impl.EmailSenderService;
 import survey.backend.service.impl.PoeService;
 import survey.backend.service.impl.TraineeService;
 
+import javax.mail.MessagingException;
 import java.util.List;
 import java.util.Optional;
 
@@ -152,13 +153,18 @@ public class PoeController {
       poeTargeted.get().getTrainees().forEach(trainee -> {
         emailSenderService.sendEmail(trainee.getEmail(), emailDto.getSubject(), emailDto.getBody());
 
-
       });
     } else {
       System.out.println("Aucune adresse mail");
     }
+  }
+
+  @PutMapping("sendMailv2")
+  //@PreAuthorize("hasRole('ADMIN')")
+  public void sendByMimeMessage(@RequestBody EmailDto emailDto) throws MessagingException {
 
 
+        emailSenderService.sendMimeMessage("agui.jeremy@gmail.com", emailDto.getSubject(), emailDto.getBody());
 
   }
 
