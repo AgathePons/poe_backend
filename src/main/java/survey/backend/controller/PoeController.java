@@ -135,9 +135,10 @@ public class PoeController {
 
   @GetMapping("{id}/sendMail")
   //@PreAuthorize("hasRole('ADMIN')")
-  public void sendById(@PathVariable("id") long id) {
+  public void sendById(@PathVariable("id") long id,
+                       @RequestBody EmailDto emailDto) {
 
-    emailSenderService.sendEmail("agui.jeremy@gmail.com","C'est le sujet", "C'est le body");
+    emailSenderService.sendEmail("agui.jeremy@gmail.com", emailDto.getSubject(), emailDto.getBody());
 
   }
 

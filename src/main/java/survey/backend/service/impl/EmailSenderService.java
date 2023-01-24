@@ -6,6 +6,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import javax.mail.internet.InternetAddress;
+import java.io.UnsupportedEncodingException;
 
 @Service
 public class EmailSenderService {
@@ -15,7 +16,15 @@ public class EmailSenderService {
 
     public void sendEmail(String toEmail, String subject, String body) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(new InternetAddress("fortimeshop1@gmail.com","test"));
+//        message.setFrom(new InternetAddress("fortimeshop1@gmail.com"));
+
+        try {
+            message.setFrom(new InternetAddress("fortimeshop12@gmail.com", "JL - Aelion").toString());
+        } catch (UnsupportedEncodingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
         message.setTo(toEmail);
         message.setSubject(subject);
         message.setText(body);
