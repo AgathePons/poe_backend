@@ -26,7 +26,12 @@ public class EmailSenderService {
         helper.setText(body, true); // Use this or above line.
         helper.setTo(toEmail);
         helper.setSubject(subject);
-        helper.setFrom("fortimeShop1@gmail.com");
+        try {
+            helper.setFrom(new InternetAddress("fortimeshop1@gmail.com", "Aelion Survey").toString());
+        } catch (UnsupportedEncodingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         mailSender.send(mimeMessage);
     }
 
@@ -35,7 +40,7 @@ public class EmailSenderService {
 //        message.setFrom(new InternetAddress("fortimeshop1@gmail.com"));
 
         try {
-            message.setFrom(new InternetAddress("fortimeshop12@gmail.com", "JL - Aelion").toString());
+            message.setFrom(new InternetAddress("fortimeshop1@gmail.com", "Aelion Survey").toString());
         } catch (UnsupportedEncodingException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

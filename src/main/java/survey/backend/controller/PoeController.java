@@ -159,12 +159,36 @@ public class PoeController {
     }
   }
 
+  @PutMapping("{id}/sendHtmlMail")
+  //@PreAuthorize("hasRole('ADMIN')")
+  public void sendHtmlById(@PathVariable("id") long id,
+                       @RequestBody EmailDto emailDto) throws MessagingException {
+
+    Optional<PoeFullDto> poeTargeted = this.poeService.findById(id);
+
+    if (poeTargeted.isPresent()) {
+      poeTargeted.get().getTrainees().forEach(trainee -> {
+        try {
+          emailSenderService.sendMimeMessage(
+                  trainee.getEmail(),
+                  emailDto.getSubject(),
+                  "Bonjour "+ trainee.getFirstName() + ",<br><br>" + emailDto.getBody());
+        } catch (MessagingException e) {
+          throw new RuntimeException(e);
+        }
+
+      });
+    } else {
+      System.out.println("Aucune adresse mail");
+    }
+  }
+
   @PutMapping("sendMailv2")
   //@PreAuthorize("hasRole('ADMIN')")
   public void sendByMimeMessage(@RequestBody EmailDto emailDto) throws MessagingException {
 
 
-        emailSenderService.sendMimeMessage("agui.jeremy@gmail.com", emailDto.getSubject(), emailDto.getBody());
+        emailSenderService.sendMimeMessage("poesurvey96@gmail.com", emailDto.getSubject(), "Bonjour Julien <br>" + emailDto.getBody());
 
   }
 
