@@ -183,15 +183,7 @@ public class PoeController {
     }
   }
 
-  @PutMapping("sendMailv2")
-  //@PreAuthorize("hasRole('ADMIN')")
-  public void sendByMimeMessage(@RequestBody EmailDto emailDto) throws MessagingException {
-
-
-        emailSenderService.sendMimeMessage("poesurvey96@gmail.com", emailDto.getSubject(), "Bonjour Julien <br>" + emailDto.getBody());
-
-  }
-
+ 
 }
 
 
